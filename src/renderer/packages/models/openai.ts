@@ -67,13 +67,15 @@ export default class OpenAI extends Base {
     }
 
     async requestChatCompletionsStream(requestBody: Record<string, any>, signal?: AbortSignal, onResultChange?: onResultChange): Promise<string> {
-        const apiPath = this.options.apiPath || '/v1/chat/completions'
+        //const apiPath = this.options.apiPath || '/v1/chat/completions'
+        const apiPath = this.options.apiPath || '/chat/completions'
         const response = await this.post(
             `${this.options.apiHost}${apiPath}`,
             this.getHeaders(),
             requestBody,
             signal
         )
+        console.log('')
         let result = ''
         await this.handleSSE(response, (message) => {
             if (message === '[DONE]') {
