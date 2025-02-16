@@ -16,16 +16,16 @@ export async function checkNeedUpdate(version: string, os: string, config: Confi
     type Response = {
         need_update?: boolean
     }
-    const res = await ofetch<Response>(`${API_ORIGIN}/ce/chatbox_need_update/${version}`, {
-        method: 'POST',
-        retry: 3,
-        body: {
-            uuid: config.uuid,
-            os: os,
-            allowReportingAndTracking: settings.allowReportingAndTracking ? 1 : 0,
-        },
-    })
-    return !!res['need_update']
+    //const res = await ofetch<Response>(`${API_ORIGIN}/ce/chatbox_need_update/${version}`, {
+    //    method: 'POST',
+    //    retry: 3,
+    //    body: {
+    //        uuid: config.uuid,
+    //        os: os,
+    //        allowReportingAndTracking: false ? 1 : 0,
+    //    },
+    //})
+    //return !!res['need_update']
 }
 
 export async function listCopilots(lang: string) {

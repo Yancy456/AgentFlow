@@ -24,15 +24,15 @@ export default function RemoteDialogWindow() {
             return
         }
         try {
-            const dialog = await remote.getDialogConfig({
-                uuid: config.uuid,
-                language: settings.language,
-                version: version,
-            })
-            setDialogConfig(dialog)
-            if (dialog) {
-                setOpen(true)
-            }
+            //const dialog = await remote.getDialogConfig({
+            //    uuid: config.uuid,
+            //    language: settings.language,
+            //    version: version,
+            //})
+            //setDialogConfig(dialog)
+            //if (dialog) {
+            //    setOpen(true)
+            //}
         } catch (e) {
             console.log(e)
         }
