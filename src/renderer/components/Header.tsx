@@ -19,7 +19,7 @@ export default function Header(props: Props) {
             && currentSession.messages.length >= 2
         ) {
             sessionActions.generateName(currentSession.id)
-            return 
+            return
         }
     }, [currentSession.messages.length])
 

@@ -72,7 +72,8 @@ export default function InputBox(props: Props) {
     const [easterEgg, setEasterEgg] = useState(false)
 
     return (
-        <div className='pl-2 pr-4'
+        <div
+            className='pl-2 pr-4'
             style={{
                 borderTopWidth: '1px',
                 borderTopStyle: 'solid',

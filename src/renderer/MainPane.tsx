@@ -3,25 +3,28 @@ import * as atoms from './stores/atoms'
 import { useAtomValue } from 'jotai'
 import InputBox from './components/InputBox'
 import MessageList from './components/MessageList'
-import { drawerWidth } from './Sidebar'
+//import { drawerWidth } from './Sidebar'
 import Header from './components/Header'
+import { isMobile } from './packages/checkOS'
 
-interface Props {}
+interface Props { }
 
+const drawerWidth = isMobile() ? 0 : 240
 export default function MainPane(props: Props) {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
 
     return (
         <Box
-            className="h-full w-full"
+            className="flex flex-col flex-grow"
             sx={{
-                flexGrow: 1,
+                //flexGrow: 1,
                 marginLeft: `${drawerWidth}px`,
             }}
         >
-            <div className="flex flex-col h-full">
-                <Header />
+            <div className="flex-grow-[8]">
                 <MessageList />
+            </div>
+            <div className="flex-grow-[2]">
                 <InputBox currentSessionId={currentSession.id} currentSessionType={currentSession.type || 'chat'} />
             </div>
         </Box>

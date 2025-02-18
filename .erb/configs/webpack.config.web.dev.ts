@@ -92,8 +92,6 @@ const configuration: webpack.Configuration = {
             analyzerPort: 8889,
         }),
 
-        new ReactRefreshWebpackPlugin(),
-
         new HtmlWebpackPlugin({
             filename: 'index.html', // Direct output to root
             template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),

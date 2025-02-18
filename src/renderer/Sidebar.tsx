@@ -25,7 +25,8 @@ import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import { useSetAtom } from 'jotai'
 import * as atoms from './stores/atoms'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
-import { trackingEvent } from './packages/event'
+//import { trackingEvent } from './packages/event'
+import { isMobile } from './packages/checkOS'
 
 export const drawerWidth = 240
 
@@ -45,7 +46,7 @@ export default function Sidebar(props: Props) {
         if (sessionListRef.current) {
             sessionListRef.current.scrollTo(0, 0)
         }
-        trackingEvent('create_new_conversation', { event_category: 'user' })
+        //trackingEvent('create_new_conversation', { event_category: 'user' })
     }
 
     const theme = useTheme()
@@ -71,14 +72,14 @@ export default function Sidebar(props: Props) {
                     <Box className="flex justify-between items-center px-2">
                         <Box>
                             <a
-                                href="https://github.com/Bin-Huang/chatbox"
+                                //href="https://github.com/Bin-Huang/chatbox"
                                 target="_blank"
                                 className="flex items-center no-underline"
                             >
                                 <img src={icon} className="w-8 h-8 mr-3" />
                                 <div className="flex flex-col items-start">
-                                    <span className="text-2xl font-medium">Chatbox</span>
-                                    <span className="text-[10px] opacity-50">Community Edition</span>
+                                    <span className="text-2xl font-medium">ChatFlow</span>
+                                    {/*<span className="text-[10px] opacity-50">Community Edition</span>*/}
                                 </div>
                             </a>
                         </Box>
