@@ -120,6 +120,7 @@ export default class Base {
         let requestError: ApiError | NetworkError | null = null
         for (let i = 0; i < retry + 1; i++) {
             try {
+                console.log(headers)
                 const res = await fetch(url, {
                     method: 'POST',
                     headers,

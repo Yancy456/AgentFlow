@@ -115,8 +115,9 @@ export default class OpenAI extends Base {
     }
 
     getHeaders() {
+        console.log(this.options.openaiKey)
         const headers: Record<string, string> = {
-            Authorization: `Bearer ${this.options.openaiKey}`,
+            'Authorization': `Bearer ${this.options.openaiKey}`,
             'Content-Type': 'application/json',
         }
         if (this.options.apiHost.includes('openrouter.ai')) {

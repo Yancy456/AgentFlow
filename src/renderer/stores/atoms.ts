@@ -1,5 +1,6 @@
 import { atom, SetStateAction } from 'jotai'
-import { Session, Toast, Settings, CopilotDetail, Message, SettingWindowTab
+import {
+    Session, Toast, Settings, CopilotDetail, Message, SettingWindowTab
 } from '../../shared/types'
 import { selectAtom, atomWithStorage } from 'jotai/utils'
 import { focusAtom } from 'jotai-optics'
@@ -107,7 +108,6 @@ export const currentMessageListAtom = selectAtom(currentSessionAtom, (s) => {
 })
 
 // toasts
-
 export const toastsAtom = atom<Toast[]>([])
 
 // theme
