@@ -8,21 +8,75 @@ import * as defaults from '../../shared/defaults'
 import storage, { StorageKey } from '../storage'
 import platform from '../packages/platform'
 
+
+
 const _settingsAtom = atomWithStorage<Settings>(StorageKey.Settings, defaults.settings(), storage)
-export const settingsAtom = atom(
-    (get) => {
-        const settings = get(_settingsAtom)
-        return Object.assign({}, defaults.settings(), settings)
-    },
-    (get, set, update: SetStateAction<Settings>) => {
-        const settings = get(_settingsAtom)
-        let newSettings = typeof update === 'function' ? update(settings) : update
-        if (newSettings.proxy !== settings.proxy) {
-            platform.ensureProxyConfig({ proxy: newSettings.proxy })
-        }
-        set(_settingsAtom, newSettings)
+
+// A function to initialize the settingsAtom based on the current value in storage
+function initializeSettingsAtom() {
+    let storedSettings = localStorage.getItem(StorageKey.Settings);
+    let storedSettings_obj: Settings;
+    if (storedSettings !== null) {
+        // If settings exist in storage, parse and set them as the initial value
+        storedSettings_obj = JSON.parse(storedSettings);
+    } else {
+        // If no settings exist, use the default settings
+        storedSettings_obj = defaults.settings();
     }
-)
+    return atom(
+        (get) => {
+            const settings = get(_settingsAtom);
+            return Object.assign({}, defaults.settings(), settings, storedSettings_obj);
+        },
+        (get, set, update: SetStateAction<Settings>) => {
+            const settings = get(_settingsAtom);
+            let newSettings = typeof update === 'function' ? update(settings) : update;
+            if (newSettings.proxy !== settings.proxy) {
+                platform.ensureProxyConfig({ proxy: newSettings.proxy });
+            }
+            localStorage.setItem(StorageKey.Settings, JSON.stringify(newSettings));
+            set(_settingsAtom, newSettings);
+        }
+    );
+}
+
+// Initialize the settingsAtom with the current value from storage
+export let settingsAtom = initializeSettingsAtom()
+
+//export let settingsAtom = atom(
+//    (get) => {
+//        const settings = get(_settingsAtom)
+//        return Object.assign({}, defaults.settings(), settings)
+//    },
+//    (get, set, update: SetStateAction<Settings>) => {
+//        const settings = get(_settingsAtom)
+//        let newSettings = typeof update === 'function' ? update(settings) : update
+//        if (newSettings.proxy !== settings.proxy) {
+//            platform.ensureProxyConfig({ proxy: newSettings.proxy })
+//        }
+//        set(_settingsAtom, newSettings)
+//    }
+//)
+
+//document.addEventListener('DOMContentLoaded', async (event) => {
+//    const settings = await storage.getItem(StorageKey.Settings, defaults.settings())
+//    console.log(settings)
+//    const _settingsAtom = atomWithStorage<Settings>(StorageKey.Settings, settings, storage)
+//    settingsAtom = atom(
+//        (get) => {
+//            const settings = get(_settingsAtom)
+//            return Object.assign({}, defaults.settings(), settings)
+//        },
+//        (get, set, update: SetStateAction<Settings>) => {
+//            const settings = get(_settingsAtom)
+//            let newSettings = typeof update === 'function' ? update(settings) : update
+//            if (newSettings.proxy !== settings.proxy) {
+//                platform.ensureProxyConfig({ proxy: newSettings.proxy })
+//            }
+//            set(_settingsAtom, newSettings)
+//        }
+//    )
+//})
 
 export const languageAtom = focusAtom(settingsAtom, (optic) => optic.prop('language'))
 export const showWordCountAtom = focusAtom(settingsAtom, (optic) => optic.prop('showWordCount'))
@@ -42,8 +96,8 @@ export const licenseDetailAtom = focusAtom(settingsAtom, (optic) => optic.prop('
 // myCopilots
 export const myCopilotsAtom = atomWithStorage<CopilotDetail[]>(StorageKey.MyCopilots, [], storage)
 
-// sessions
 
+// sessions
 const _sessionsAtom = atomWithStorage<Session[]>(StorageKey.ChatSessions, [], storage)
 export const sessionsAtom = atom(
     (get) => {
@@ -98,7 +152,6 @@ export const currentSessionAtom = atom((get) => {
 export const currentSessionNameAtom = selectAtom(currentSessionAtom, (s) => s.name)
 export const currsentSessionPicUrlAtom = selectAtom(currentSessionAtom, (s) => s.picUrl)
 
-
 export const currentMessageListAtom = selectAtom(currentSessionAtom, (s) => {
     let messageContext: Message[] = []
     if (s.messages) {
@@ -110,8 +163,8 @@ export const currentMessageListAtom = selectAtom(currentSessionAtom, (s) => {
 // toasts
 export const toastsAtom = atom<Toast[]>([])
 
-// theme
 
+// theme
 export const activeThemeAtom = atom<'light' | 'dark'>('light')
 
 export const configVersionAtom = atomWithStorage<number>(StorageKey.ConfigVersion, 0, storage)
