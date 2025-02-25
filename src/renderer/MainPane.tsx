@@ -7,7 +7,7 @@ import MessageList from './components/MessageList'
 import Header from './components/Header'
 import { isMobile } from './packages/checkOS'
 
-interface Props { }
+interface Props {}
 
 const drawerWidth = isMobile() ? 0 : 240
 export default function MainPane(props: Props) {

@@ -1,43 +1,39 @@
 import { atom, SetStateAction } from 'jotai'
-import {
-    Session, Toast, Settings, CopilotDetail, Message, SettingWindowTab
-} from '../../shared/types'
+import { Session, Toast, Settings, CopilotDetail, Message, SettingWindowTab } from '../../shared/types'
 import { selectAtom, atomWithStorage } from 'jotai/utils'
 import { focusAtom } from 'jotai-optics'
 import * as defaults from '../../shared/defaults'
 import storage, { StorageKey } from '../storage'
 import platform from '../packages/platform'
 
-
-
 const _settingsAtom = atomWithStorage<Settings>(StorageKey.Settings, defaults.settings(), storage)
 
 // A function to initialize the settingsAtom based on the current value in storage
 function initializeSettingsAtom() {
-    let storedSettings = localStorage.getItem(StorageKey.Settings);
-    let storedSettings_obj: Settings;
+    let storedSettings = localStorage.getItem(StorageKey.Settings)
+    let storedSettings_obj: Settings
     if (storedSettings !== null) {
         // If settings exist in storage, parse and set them as the initial value
-        storedSettings_obj = JSON.parse(storedSettings);
+        storedSettings_obj = JSON.parse(storedSettings)
     } else {
         // If no settings exist, use the default settings
-        storedSettings_obj = defaults.settings();
+        storedSettings_obj = defaults.settings()
     }
     return atom(
         (get) => {
-            const settings = get(_settingsAtom);
-            return Object.assign({}, defaults.settings(), settings, storedSettings_obj);
+            const settings = get(_settingsAtom)
+            return Object.assign({}, defaults.settings(), settings, storedSettings_obj)
         },
         (get, set, update: SetStateAction<Settings>) => {
-            const settings = get(_settingsAtom);
-            let newSettings = typeof update === 'function' ? update(settings) : update;
+            const settings = get(_settingsAtom)
+            let newSettings = typeof update === 'function' ? update(settings) : update
             if (newSettings.proxy !== settings.proxy) {
-                platform.ensureProxyConfig({ proxy: newSettings.proxy });
+                platform.ensureProxyConfig({ proxy: newSettings.proxy })
             }
-            localStorage.setItem(StorageKey.Settings, JSON.stringify(newSettings));
-            set(_settingsAtom, newSettings);
+            localStorage.setItem(StorageKey.Settings, JSON.stringify(newSettings))
+            set(_settingsAtom, newSettings)
         }
-    );
+    )
 }
 
 // Initialize the settingsAtom with the current value from storage
@@ -96,7 +92,6 @@ export const licenseDetailAtom = focusAtom(settingsAtom, (optic) => optic.prop('
 // myCopilots
 export const myCopilotsAtom = atomWithStorage<CopilotDetail[]>(StorageKey.MyCopilots, [], storage)
 
-
 // sessions
 const _sessionsAtom = atomWithStorage<Session[]>(StorageKey.ChatSessions, [], storage)
 export const sessionsAtom = atom(
@@ -144,7 +139,7 @@ export const currentSessionAtom = atom((get) => {
     const sessions = get(sessionsAtom)
     let current = sessions.find((session) => session.id === id)
     if (!current) {
-        return sessions[sessions.length - 1]    // fallback to the last session
+        return sessions[sessions.length - 1] // fallback to the last session
     }
     return current
 })
@@ -162,7 +157,6 @@ export const currentMessageListAtom = selectAtom(currentSessionAtom, (s) => {
 
 // toasts
 export const toastsAtom = atom<Toast[]>([])
-
 
 // theme
 export const activeThemeAtom = atom<'light' | 'dark'>('light')

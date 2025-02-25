@@ -14,7 +14,6 @@ import RemoteDialogWindow from './RemoteDialogWindow'
 import Toasts from '../components/Toasts'
 
 export default function Main() {
-
     const spellCheck = useAtomValue(atoms.spellCheckAtom)
 
     const [openSettingWindow, setOpenSettingWindow] = useAtom(atoms.openSettingDialogAtom)

@@ -5,17 +5,15 @@ import useAppTheme from './hooks/useAppTheme'
 import { useI18nEffect } from './hooks/useI18nEffect'
 import { useSystemLanguageWhenInit } from './hooks/useDefaultSystemLanguage'
 import * as premiumActions from './stores/premiumActions'
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react'
 import { isMobile } from './packages/checkOS'
 
-const MobilePage = lazy(() => import('./mobile/MainWindow'));
-const DesktopPage = lazy(() => import('./desktop/MainWindow'));
-
+const MobilePage = lazy(() => import('./mobile/MainWindow'))
+const DesktopPage = lazy(() => import('./desktop/MainWindow'))
 
 function SelectPlatform() {
-    return isMobile() ? <MobilePage /> : <DesktopPage />;
+    return isMobile() ? <MobilePage /> : <DesktopPage />
 }
-
 
 export default function App() {
     useI18nEffect()

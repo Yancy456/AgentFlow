@@ -1,5 +1,5 @@
-import { ElectronIPC } from "src/shared/electron-types"
-import { Config, Settings } from "src/shared/types"
+import { ElectronIPC } from 'src/shared/electron-types'
+import { Config, Settings } from 'src/shared/types'
 import { getOS } from './navigator'
 import { parseLocale } from '@/i18n/parser'
 import Exporter from './exporter'
@@ -26,10 +26,10 @@ export class DesktopPlatform {
     }
     public onWindowShow(callback: () => void): () => void {
         const handler = () => {
-            if (document.visibilityState === 'visible') callback();
-        };
-        document.addEventListener('visibilitychange', handler);
-        return () => document.removeEventListener('visibilitychange', handler);
+            if (document.visibilityState === 'visible') callback()
+        }
+        document.addEventListener('visibilitychange', handler)
+        return () => document.removeEventListener('visibilitychange', handler)
     }
     public async openLink(url: string): Promise<void> {
         window.open(url)
@@ -72,21 +72,20 @@ export class DesktopPlatform {
     }
     public async getAllStoreValues(): Promise<{ [key: string]: any }> {
         return Object.keys(localStorage).reduce((acc, key) => {
-            acc[key] = localStorage.getItem(key);
-            return acc;
-        }, {} as { [key: string]: any });
+            acc[key] = localStorage.getItem(key)
+            return acc
+        }, {} as { [key: string]: any })
     }
     public async setAllStoreValues(data: { [key: string]: any }) {
         Object.entries(data).forEach(([key, value]) => {
-            localStorage.setItem(key, JSON.stringify(value));
-        });
+            localStorage.setItem(key, JSON.stringify(value))
+        })
     }
 
     public initTracking(): void {
         this.trackingEvent('user_engagement', {})
     }
-    public trackingEvent(name: string, params: { [key: string]: string }) {
-    }
+    public trackingEvent(name: string, params: { [key: string]: string }) {}
 
     public async shouldShowAboutDialogWhenStartUp(): Promise<boolean> {
         return false
@@ -94,7 +93,6 @@ export class DesktopPlatform {
     }
 
     public async appLog(level: string, message: string) {
-
         //return this.ipc.invoke('appLog', JSON.stringify({ level, message }))
     }
 }

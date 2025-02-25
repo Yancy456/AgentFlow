@@ -122,12 +122,7 @@ export default class ChatboxAI extends Base {
         }
     }
 
-    async get(
-        url: string,
-        headers: Record<string, string>,
-        signal?: AbortSignal,
-        retry = 3
-    ) {
+    async get(url: string, headers: Record<string, string>, signal?: AbortSignal, retry = 3) {
         let requestError: ApiError | NetworkError | null = null
         for (let i = 0; i < retry + 1; i++) {
             try {
@@ -162,7 +157,6 @@ export default class ChatboxAI extends Base {
             throw new Error('Unknown error')
         }
     }
-
 }
 
 export interface ChatboxAIMessage {
