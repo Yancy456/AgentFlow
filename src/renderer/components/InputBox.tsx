@@ -39,8 +39,8 @@ export default function InputBox(props: Props) {
         trackingEvent('send_message', { event_category: 'user' })
     }
 
-    const minTextareaHeight = 66
-    const maxTextareaHeight = 96
+    const minTextareaHeight = 20
+    const maxTextareaHeight = 40
 
     const onMessageInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const input = event.target.value
@@ -64,26 +64,43 @@ export default function InputBox(props: Props) {
 
     return (
         <div
-            className="pl-2 pr-4"
+            className='m-3 rounded-lg'
             style={{
-                borderTopWidth: '1px',
-                borderTopStyle: 'solid',
-                borderTopColor: theme.palette.divider,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: theme.palette.divider,
             }}
         >
-            <div className={cn('w-full mx-auto flex flex-col')}>
-                <div className="flex flex-row flex-nowrap justify-between py-1">
+            <div className={cn(
+                'w-full mx-auto flex flex-col',
+                'p-1'
+            )}>
+                <textarea
+                    className={cn(
+                        `w-full max-h-[${maxTextareaHeight}px]`,
+                        'resize-none border-none outline-none',
+                        'overflow-y resize-none border-none outline-none',
+                        'bg-transparent p-2'
+                        //'bg-transparent p-1'
+                    )}
+                    value={messageInput}
+                    onChange={onMessageInput}
+                    onKeyDown={onKeyDown}
+                    ref={inputRef}
+                    style={{
+                        height: 'auto',
+                        minHeight: minTextareaHeight + 'px',
+                        color: theme.palette.text.primary,
+                        fontFamily: theme.typography.fontFamily,
+                        fontSize: theme.typography.body1.fontSize
+                    }}
+                    placeholder={t('How can I help you ?') || ''}
+                />
+                <div
+                    className="flex flex-row flex-nowrap justify-between"
+                //className="flex flex-row flex-nowrap justify-between py-1"
+                >
                     <div className="flex flex-row items-center">
-                        <MiniButton
-                            className="mr-2 hover:bg-transparent"
-                            style={{ color: theme.palette.text.primary }}
-                            onClick={() => {
-                                setEasterEgg(true)
-                                setTimeout(() => setEasterEgg(false), 1000)
-                            }}
-                        >
-                            <img className={cn('w-5 h-5', easterEgg ? 'animate-spin' : '')} src={icon} />
-                        </MiniButton>
                         <MiniButton
                             className="mr-2"
                             style={{ color: theme.palette.text.primary }}
@@ -95,15 +112,15 @@ export default function InputBox(props: Props) {
                             }
                             tooltipPlacement="top"
                         >
-                            <Settings2 size="22" strokeWidth={1} />
+                            <Settings2 size="20" strokeWidth={1} />
                         </MiniButton>
                     </div>
                     <div className="flex flex-row items-center">
                         <MiniButton
                             className="w-8 ml-2"
                             style={{
-                                color: theme.palette.getContrastText(theme.palette.primary.main),
-                                backgroundColor: theme.palette.primary.main,
+                                //color: theme.palette.getContrastText(theme.palette.primary.main),
+                                //backgroundColor: theme.palette.primary.main,
                             }}
                             tooltipTitle={
                                 <Typography variant="caption">
@@ -113,31 +130,9 @@ export default function InputBox(props: Props) {
                             tooltipPlacement="top"
                             onClick={() => handleSubmit()}
                         >
-                            <SendHorizontal size="22" strokeWidth={1} />
+                            <SendHorizontal size="20" strokeWidth={1} />
                         </MiniButton>
                     </div>
-                </div>
-                <div className="w-full pl-1 pb-2">
-                    <textarea
-                        className={cn(
-                            `w-full max-h-[${maxTextareaHeight}px]`,
-                            'overflow-y resize-none border-none outline-none',
-                            'bg-transparent p-1'
-                        )}
-                        value={messageInput}
-                        onChange={onMessageInput}
-                        onKeyDown={onKeyDown}
-                        ref={inputRef}
-                        style={{
-                            height: 'auto',
-                            minHeight: minTextareaHeight + 'px',
-                            color: theme.palette.text.primary,
-                            fontFamily: theme.typography.fontFamily,
-                            fontSize: theme.typography.body1.fontSize,
-                        }}
-                        placeholder={t('Type your question here...') || ''}
-                    />
-                    <div className="flex flex-row items-center"></div>
                 </div>
             </div>
         </div>

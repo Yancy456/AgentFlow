@@ -53,7 +53,7 @@ export default function Sidebar(props: Props) {
 
     return (
         <div
-            className="fixed top-0 left-0 h-full z-50"
+            className="h-full"
             style={{
                 boxSizing: 'border-box',
                 width: drawerWidth,

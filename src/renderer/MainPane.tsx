@@ -7,26 +7,19 @@ import MessageList from './components/MessageList'
 import Header from './components/Header'
 import { isMobile } from './packages/checkOS'
 
-interface Props {}
+interface Props { }
 
 const drawerWidth = isMobile() ? 0 : 240
 export default function MainPane(props: Props) {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
 
     return (
-        <Box
-            className="flex flex-col flex-grow"
-            sx={{
-                //flexGrow: 1,
-                marginLeft: `${drawerWidth}px`,
-            }}
+        <div
+            style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}
         >
-            <div className="flex-grow-[8]">
-                <MessageList />
-            </div>
-            <div className="flex-grow-[2]">
-                <InputBox currentSessionId={currentSession.id} currentSessionType={currentSession.type || 'chat'} />
-            </div>
-        </Box>
+            <Header />
+            <MessageList />
+            <InputBox currentSessionId={currentSession.id} currentSessionType={currentSession.type || 'chat'} />
+        </div>
     )
 }

@@ -23,15 +23,16 @@ export default function Main() {
     const [openCopilotWindow, setOpenCopilotWindow] = React.useState(false)
 
     return (
-        <Box className="box-border App" spellCheck={spellCheck}>
-            <Grid container className="h-full">
+        <Box className="box-border App h-screen" spellCheck={spellCheck}>
+            <div className='h-full w-full' style={{ display: 'flex' }}>
                 <Sidebar
                     openCopilotWindow={() => setOpenCopilotWindow(true)}
                     openAboutWindow={() => setOpenAboutWindow(true)}
                     setOpenSettingWindow={setOpenSettingWindow}
                 />
                 <MainPane />
-            </Grid>
+            </div>
+
             <SettingDialog
                 open={!!openSettingWindow}
                 targetTab={openSettingWindow || undefined}

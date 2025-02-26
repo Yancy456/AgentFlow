@@ -6,7 +6,6 @@ import * as defaults from '../../shared/defaults'
 import storage, { StorageKey } from '../storage'
 import platform from '../packages/platform'
 
-
 // A function to initialize the settingsAtom based on the current value in storage
 function initializeSettingsAtom() {
     let storedSettings = localStorage.getItem(StorageKey.Settings)
