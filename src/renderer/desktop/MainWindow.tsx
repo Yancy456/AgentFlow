@@ -24,7 +24,7 @@ export default function Main() {
 
     return (
         <Box className="box-border App h-screen" spellCheck={spellCheck}>
-            <div className='h-full w-full' style={{ display: 'flex' }}>
+            <div className="h-full w-full" style={{ display: 'flex' }}>
                 <Sidebar
                     openCopilotWindow={() => setOpenCopilotWindow(true)}
                     openAboutWindow={() => setOpenAboutWindow(true)}

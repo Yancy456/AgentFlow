@@ -64,17 +64,14 @@ export default function InputBox(props: Props) {
 
     return (
         <div
-            className='m-3 rounded-lg'
+            className="m-3 rounded-lg"
             style={{
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: theme.palette.divider,
             }}
         >
-            <div className={cn(
-                'w-full mx-auto flex flex-col',
-                'p-1'
-            )}>
+            <div className={cn('w-full mx-auto flex flex-col', 'p-1')}>
                 <textarea
                     className={cn(
                         `w-full max-h-[${maxTextareaHeight}px]`,
@@ -92,13 +89,13 @@ export default function InputBox(props: Props) {
                         minHeight: minTextareaHeight + 'px',
                         color: theme.palette.text.primary,
                         fontFamily: theme.typography.fontFamily,
-                        fontSize: theme.typography.body1.fontSize
+                        fontSize: theme.typography.body1.fontSize,
                     }}
                     placeholder={t('How can I help you ?') || ''}
                 />
                 <div
                     className="flex flex-row flex-nowrap justify-between"
-                //className="flex flex-row flex-nowrap justify-between py-1"
+                    //className="flex flex-row flex-nowrap justify-between py-1"
                 >
                     <div className="flex flex-row items-center">
                         <MiniButton
@@ -118,10 +115,12 @@ export default function InputBox(props: Props) {
                     <div className="flex flex-row items-center">
                         <MiniButton
                             className="w-8 ml-2"
-                            style={{
-                                //color: theme.palette.getContrastText(theme.palette.primary.main),
-                                //backgroundColor: theme.palette.primary.main,
-                            }}
+                            style={
+                                {
+                                    //color: theme.palette.getContrastText(theme.palette.primary.main),
+                                    //backgroundColor: theme.palette.primary.main,
+                                }
+                            }
                             tooltipTitle={
                                 <Typography variant="caption">
                                     {t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}

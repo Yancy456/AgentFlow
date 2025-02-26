@@ -16,4 +16,4 @@ The Chat *Base* class in /renderer/packages/models/base.ts provides following fu
 
 - *async chat(message,onResultUpdated)*: It provides  
 
-- *async _chat(message,onResultUpdated)*: It provides  
+- *async _chat(message,onResultUpdated)*: It provides

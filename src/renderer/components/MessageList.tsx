@@ -4,7 +4,7 @@ import * as atoms from '../stores/atoms'
 import { useAtom, useAtomValue } from 'jotai'
 import { cn } from '@/lib/utils'
 
-interface Props { }
+interface Props {}
 
 export default function MessageList(props: Props) {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
@@ -15,10 +15,7 @@ export default function MessageList(props: Props) {
         setMessageListRef(ref)
     }, [ref])
     return (
-        <div
-            style={{ flex: 1, overflow: 'scroll' }}
-            ref={ref}
-        >
+        <div style={{ flex: 1, overflow: 'scroll' }} ref={ref}>
             {currentMessageList.map((msg, index) => (
                 <Message
                     id={msg.id}
