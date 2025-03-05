@@ -90,6 +90,7 @@ export default class OpenAI extends Base {
         const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
         console.log('')
         let result = ''
+
         await this.handleSSE(response, (message) => {
             if (message === '[DONE]') {
                 return
@@ -106,6 +107,7 @@ export default class OpenAI extends Base {
                 }
             }
         })
+
         return result
     }
 
@@ -114,7 +116,7 @@ export default class OpenAI extends Base {
         signal?: AbortSignal,
         onResultChange?: onResultChange
     ): Promise<string> {
-        const apiPath = this.options.apiPath || '/v1/chat/completions'
+        const apiPath = this.options.apiPath || '/chat/completions'
         const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
         const json = await response.json()
         if (json.error) {

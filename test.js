@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-    apiKey: '',
+    apiKey: '6d5444da-0f1d-4ab8-b0b0-9f5a783c5d8b',
     baseURL: 'https://ark.cn-beijing.volces.com/api/v3',
 });
 
@@ -17,8 +17,13 @@ async function main()
         model: 'ep-20250216065055-p6bvt',
         stream: true,
     });
+    console.log(stream)
+
+    let i = 1
     for await (const part of stream)
     {
+        process.stdout.write(String(i) + ' ')
+        i++
         process.stdout.write(part.choices[0]?.delta?.content || '');
     }
     process.stdout.write('\n');

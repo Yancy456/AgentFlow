@@ -12,7 +12,7 @@ import _ from 'lodash'
 export default class Base {
     public name = 'Unknown'
 
-    constructor() {}
+    constructor() { }
 
     async callChatCompletion(
         messages: Message[],
@@ -25,7 +25,9 @@ export default class Base {
     async chat(
         messages: Message[],
         onResultUpdated?: (data: { text: string; cancel(): void }) => void
-    ): Promise<string> {
+    ): Promise<string>
+    /*
+    */ {
         messages = await this.preprocessMessage(messages)
         return await this._chat(messages, onResultUpdated)
     }
@@ -45,11 +47,13 @@ export default class Base {
             let onResultChange: onResultChange | undefined = undefined
             if (onResultUpdated) {
                 onResultUpdated({ text: result, cancel: stop })
+
                 onResultChange = (newResult: string) => {
                     result = newResult
                     onResultUpdated({ text: result, cancel: stop })
                 }
             }
+
             result = await this.callChatCompletion(messages, controller.signal, onResultChange)
         } catch (error) {
             if (canceled) {
@@ -65,6 +69,8 @@ export default class Base {
     }
 
     async handleSSE(response: Response, onMessage: (message: string) => void) {
+        //Establish the Sever-Sent Event(SSE), which the web has a long connection with the server, 
+        // and the server sends back messages from time to time
         if (!response.ok) {
             const errJson = await response.json().catch(() => null)
             throw new ApiError(errJson ? JSON.stringify(errJson) : `${response.status} ${response.statusText}`)
