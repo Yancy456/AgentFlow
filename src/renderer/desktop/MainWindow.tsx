@@ -15,6 +15,9 @@ import RemoteDialogWindow from './RemoteDialogWindow'
 import Toasts from '../components/Toasts'
 import TitleBar from '@/components/TitleBar'
 import MenuBar from '@/components/MenuBar'
+import ChatView from '@/desktop/ChatView'
+import AgentFlow from '@/desktop/AgentFlow'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
 export default function Main() {
     const spellCheck = useAtomValue(atoms.spellCheckAtom)
@@ -26,34 +29,35 @@ export default function Main() {
     const [openCopilotWindow, setOpenCopilotWindow] = React.useState(false)
 
     return (
-        <Box className="box-border App w-screen h-screen flex flex-col" spellCheck={spellCheck}>
+        <Router>
+            <Box className="box-border App w-screen h-screen flex flex-col" spellCheck={spellCheck}>
 
-            <TitleBar />
+                <TitleBar />
 
-            <div className="grow w-full flex overflow-auto">
-                <MenuBar />
+                <div className="grow w-full flex overflow-auto">
+                    <MenuBar />
 
-                <div className='rounded-sm border-t-[0.5px] border-l-[0.5px] border-[#00000028] grow flex flex-row h-full border-solid' style={{ overflow: 'auto' }}>
-                    <ChatList
-                        openCopilotWindow={() => setOpenCopilotWindow(true)}
-                        openAboutWindow={() => setOpenAboutWindow(true)}
-                        setOpenSettingWindow={setOpenSettingWindow} />
-
-                    <MainPane />
+                    <div className='rounded-sm border-t-[0.5px] border-l-[0.5px] border-[#00000028] grow h-full border-solid' style={{ overflow: 'auto' }}>
+                        <Routes>
+                            <Route path="/" element={<ChatView />} />
+                            <Route path="/AgentFlow" element={<AgentFlow />} />
+                            {/*<Route path="/about" element={<About />} />*/}
+                        </Routes>
+                    </div>
                 </div>
-            </div>
 
-            <SettingDialog
-                open={!!openSettingWindow}
-                targetTab={openSettingWindow || undefined}
-                close={() => setOpenSettingWindow(null)}
-            />
-            <AboutWindow open={openAboutWindow} close={() => setOpenAboutWindow(false)} />
-            <ChatConfigWindow />
-            <CleanWidnow />
-            <CopilotWindow open={openCopilotWindow} close={() => setOpenCopilotWindow(false)} />
-            <RemoteDialogWindow />
-            <Toasts />
-        </Box >
+                <SettingDialog
+                    open={!!openSettingWindow}
+                    targetTab={openSettingWindow || undefined}
+                    close={() => setOpenSettingWindow(null)}
+                />
+                <AboutWindow open={openAboutWindow} close={() => setOpenAboutWindow(false)} />
+                <ChatConfigWindow />
+                <CleanWidnow />
+                <CopilotWindow open={openCopilotWindow} close={() => setOpenCopilotWindow(false)} />
+                <RemoteDialogWindow />
+                <Toasts />
+            </Box >
+        </Router>
     )
 }
