@@ -90,7 +90,7 @@ function initDiagram() {
                                 font: 'bold 12pt sans-serif',
                             }).bind('text', 'key')
                         ),
-                    new go.PanelExpanderButton('PANEL', new go.TextBlock('-'), new go.TextBlock('+')),
+                    //new go.PanelExpanderButton('PANEL', new go.TextBlock('-'), new go.TextBlock('+')),
                     // this Panel holds a Panel for each item object in the itemArray;
                     // each item Panel is defined by the itemTemplate to be a TableRow in this Table
                     new go.Panel('Table', {
