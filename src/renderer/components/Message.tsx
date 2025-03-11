@@ -6,7 +6,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { useTranslation } from 'react-i18next'
-import { Message, SessionType } from '../../shared/types'
+import { Message, SessionType } from '@/stores/session/data'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     showMessageTimestampAtom,
@@ -25,6 +25,9 @@ import * as dateFns from 'date-fns'
 import { cn } from '@/lib/utils'
 import { estimateTokensFromMessages } from '@/packages/token'
 import { countWord } from '@/packages/word-count'
+import { Collapse, IconButton, TextField, Button } from '@mui/material'
+import * as React from 'react'
+import { ChevronRight } from 'lucide-react'
 
 export interface Props {
     id?: string
@@ -49,6 +52,7 @@ export default function Message(props: Props) {
     const enableMarkdownRendering = useAtomValue(enableMarkdownRenderingAtom)
     const currentSessionPicUrl = useAtomValue(currsentSessionPicUrlAtom)
     const setOpenSettingWindow = useSetAtom(openSettingDialogAtom)
+    const [isOpen, setOpen] = React.useState(true)
 
     const { msg, className, collapseThreshold, hiddenButtonGroup, small } = props
 
@@ -198,6 +202,33 @@ export default function Message(props: Props) {
                 </Grid>
                 <Grid item xs sm container sx={{ width: '0px', paddingRight: '15px' }}>
                     <Grid item xs>
+                        {msg.reasoning_content ? (
+                            <Box>
+                                Reasoning process
+                                <IconButton
+                                    onClick={(e) => {
+                                        setOpen(!isOpen)
+                                    }}
+                                    sx={{ ml: 1, p: 0 }}
+                                >
+                                    <ChevronRight
+                                        size={24}
+                                        style={{
+                                            transition: 'transform 0.3s ease',
+                                            transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+                                        }}
+                                    />
+                                </IconButton>
+                                <Collapse in={isOpen}>
+                                    <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: 1, bgcolor: '#fff' }}>
+                                        <div>I think that ......</div>
+                                    </Box>
+                                </Collapse>
+                            </Box>
+                        ) : (
+                            <Box></Box>
+                        )}
+
                         <Box
                             className={cn('msg-content', { 'msg-content-small': small })}
                             sx={small ? { fontSize: theme.typography.body2.fontSize } : {}}

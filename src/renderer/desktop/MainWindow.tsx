@@ -2,8 +2,8 @@ import { useAtom, useAtomValue } from 'jotai'
 import * as atoms from '../stores/atoms'
 import { Box, Grid } from '@mui/material'
 //import Sidebar from '../Sidebar'
-import ChatList from '../ChatList'
-import MainPane from '../MainPane'
+import ChatList from '../ChatHistory'
+import MainPane from '../ChatPane'
 import React from 'react'
 import SettingDialog from './SettingDialog'
 import ChatConfigWindow from './ChatConfigWindow'
@@ -31,13 +31,15 @@ export default function Main() {
     return (
         <Router>
             <Box className="box-border App w-screen h-screen flex flex-col" spellCheck={spellCheck}>
-
                 <TitleBar />
 
                 <div className="grow w-full flex overflow-auto">
                     <MenuBar />
 
-                    <div className='rounded-sm border-t-[0.5px] border-l-[0.5px] border-[#00000028] grow h-full border-solid' style={{ overflow: 'auto' }}>
+                    <div
+                        className="rounded-sm border-t-[0.5px] border-l-[0.5px] border-[#00000028] grow h-full border-solid"
+                        style={{ overflow: 'auto' }}
+                    >
                         <Routes>
                             <Route path="/" element={<ChatView />} />
                             <Route path="/AgentFlow" element={<AgentFlow />} />
@@ -57,7 +59,7 @@ export default function Main() {
                 <CopilotWindow open={openCopilotWindow} close={() => setOpenCopilotWindow(false)} />
                 <RemoteDialogWindow />
                 <Toasts />
-            </Box >
+            </Box>
         </Router>
     )
 }

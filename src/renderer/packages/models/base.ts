@@ -1,4 +1,4 @@
-import { Message } from 'src/shared/types'
+import { Message } from '@/stores/session/data'
 import {
     ApiError,
     NetworkError,
@@ -12,56 +12,38 @@ import _ from 'lodash'
 export default class Base {
     public name = 'Unknown'
 
-    constructor() { }
+    constructor() {}
 
     async callChatCompletion(
         messages: Message[],
         signal?: AbortSignal,
         onResultChange?: onResultChange
-    ): Promise<string> {
+    ): Promise<void> {
         throw new AIProviderNoImplementedChatError(this.name)
     }
 
-    async chat(
-        messages: Message[],
-        onResultUpdated?: (data: { text: string; cancel(): void }) => void
-    ): Promise<string>
-    /*
-    */ {
+    async chat(messages: Message[], onResultUpdated?: () => void): Promise<void> /*
+     */ {
         messages = await this.preprocessMessage(messages)
-        return await this._chat(messages, onResultUpdated)
+        await this._chat(messages, onResultUpdated)
     }
 
-    protected async _chat(
-        messages: Message[],
-        onResultUpdated?: (data: { text: string; cancel(): void }) => void
-    ): Promise<string> {
+    protected async _chat(messages: Message[], onResultUpdated?: () => void): Promise<void> {
         let canceled = false
         const controller = new AbortController()
         const stop = () => {
             canceled = true
             controller.abort()
         }
-        let result = ''
         try {
-            let onResultChange: onResultChange | undefined = undefined
-            if (onResultUpdated) {
-                onResultUpdated({ text: result, cancel: stop })
-
-                onResultChange = (newResult: string) => {
-                    result = newResult
-                    onResultUpdated({ text: result, cancel: stop })
-                }
-            }
-
-            result = await this.callChatCompletion(messages, controller.signal, onResultChange)
+            await this.callChatCompletion(messages, controller.signal, onResultUpdated)
         } catch (error) {
             if (canceled) {
-                return result
+                //return result
             }
             throw error
         }
-        return result
+        //return result
     }
 
     async preprocessMessage(messages: Message[]): Promise<Message[]> {
@@ -69,7 +51,7 @@ export default class Base {
     }
 
     async handleSSE(response: Response, onMessage: (message: string) => void) {
-        //Establish the Sever-Sent Event(SSE), which the web has a long connection with the server, 
+        //Establish the Sever-Sent Event(SSE), which the web has a long connection with the server,
         // and the server sends back messages from time to time
         if (!response.ok) {
             const errJson = await response.json().catch(() => null)
@@ -140,8 +122,9 @@ export default class Base {
     ) {
         let requestError: ApiError | NetworkError | null = null
         for (let i = 0; i < retry + 1; i++) {
+            // retry if error
             try {
-                console.log(headers)
+                //console.log(headers)
                 const res = await fetch(url, {
                     method: 'POST',
                     headers,
@@ -152,6 +135,7 @@ export default class Base {
                     const err = await res.text().catch((e) => null)
                     throw new ApiError(`Status Code ${res.status}, ${err}`)
                 }
+                //console.log(await res.json())
                 return res
             } catch (e) {
                 if (e instanceof BaseError) {
@@ -203,4 +187,4 @@ export default class Base {
     }
 }
 
-export type onResultChange = (result: string) => void
+export type onResultChange = () => void

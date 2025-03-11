@@ -1,5 +1,8 @@
 import { getDefaultStore } from 'jotai'
-import { Settings, createMessage, Message, Session } from '../../shared/types'
+import { Settings, createMessage } from '../../shared/types'
+
+import { Message, Session } from '@/stores/session/data'
+
 import * as atoms from './atoms'
 import * as promptFormat from '../packages/prompts'
 import * as Sentry from '@sentry/react'
@@ -106,28 +109,34 @@ export function insertMessage(sessionId: string, msg: Message) {
     const store = getDefaultStore()
     msg.wordCount = countWord(msg.content)
     msg.tokenCount = estimateTokensFromMessages([msg])
-    store.set(atoms.sessionsAtom, (sessions) =>
-        sessions.map((s) => {
-            if (s.id === sessionId) {
-                const newMessages = [...s.messages]
-                newMessages.push(msg)
-                return {
-                    ...s,
-                    messages: newMessages,
+    store.set(
+        atoms.sessionsAtom,
+        (
+            sessions // add newMessage to storage. Need to be improved. Better to write into a class.
+        ) =>
+            sessions.map((s) => {
+                if (s.id === sessionId) {
+                    const newMessages = [...s.messages]
+                    newMessages.push(msg)
+                    return {
+                        ...s,
+                        messages: newMessages,
+                    }
                 }
-            }
-            return s
-        })
+                return s
+            })
     )
 }
 
 export function modifyMessage(sessionId: string, updated: Message, refreshCounting?: boolean) {
+    /*
+    When new message comes, modify the old message.
+    */
     const store = getDefaultStore()
     if (refreshCounting) {
         updated.wordCount = countWord(updated.content)
         updated.tokenCount = estimateTokensFromMessages([updated])
     }
-
     updated.timestamp = new Date().getTime()
 
     let hasHandled = false
@@ -135,6 +144,7 @@ export function modifyMessage(sessionId: string, updated: Message, refreshCounti
         return msgs.map((m) => {
             if (m.id === updated.id) {
                 hasHandled = true
+                console.log(`updated:${JSON.stringify(updated, null, 2)}`)
                 return { ...updated }
             }
             return m
@@ -146,6 +156,26 @@ export function modifyMessage(sessionId: string, updated: Message, refreshCounti
                 return s
             }
             s.messages = handle(s.messages)
+            return { ...s }
+        })
+    )
+}
+export function refreshMessage(sessionId: string, newMsgs: Message[], updateIdx: number) {
+    /*
+    refresh the messages, the index of newMsgs is different the original, while others remains the same.
+    */
+    const store = getDefaultStore()
+    let updated = newMsgs[updateIdx]
+    updated.wordCount = countWord(updated.content)
+    updated.tokenCount = estimateTokensFromMessages([updated])
+    updated.timestamp = new Date().getTime()
+
+    store.set(atoms.sessionsAtom, (sessions) =>
+        sessions.map((s) => {
+            if (s.id !== sessionId) {
+                return s
+            }
+            s.messages = newMsgs
             return { ...s }
         })
     )
@@ -169,6 +199,9 @@ export async function submitNewUserMessage(params: {
 }
 
 export async function generate(sessionId: string, targetMsg: Message) {
+    /*
+    The main function that generates contents. Given a targetMsg, it modifies that using function modifyMessage()
+    */
     const store = getDefaultStore()
     const settings = store.get(atoms.settingsAtom)
     const configs = await platform.getConfig()
@@ -181,6 +214,7 @@ export async function generate(sessionId: string, targetMsg: Message) {
         return
     }
     const placeholder = '...'
+
     targetMsg = {
         ...targetMsg,
         content: placeholder,
@@ -202,19 +236,15 @@ export async function generate(sessionId: string, targetMsg: Message) {
         switch (session.type) {
             case 'chat':
             case undefined:
-                const promptMsgs = genMessageContext(settings, messages.slice(0, targetMsgIx))
-                const throttledModifyMessage = throttle(({ text, cancel }: { text: string; cancel: () => void }) => {
-                    targetMsg = { ...targetMsg, content: text, cancel }
-                    modifyMessage(sessionId, targetMsg)
+                const throttledModifyMessage = throttle(() => {
+                    console.log(`modifyMessage:${JSON.stringify(messages[messages.length - 1], null, 2)}`)
+                    refreshMessage(sessionId, messages, messages.length - 1)
                 }, 100)
-                await model.chat(promptMsgs, throttledModifyMessage)
-                targetMsg = {
-                    ...targetMsg,
-                    generating: false,
-                    cancel: undefined,
-                    tokensUsed: estimateTokensFromMessages([...promptMsgs, targetMsg]),
-                }
-                modifyMessage(sessionId, targetMsg, true)
+                console.log(messages)
+                console.log(targetMsg)
+                await model.chat(messages, throttledModifyMessage) // request model API to generate new Message
+
+                refreshMessage(sessionId, messages, messages.length - 1) // Based on the returned targetMsg, modify the old seesion message
                 break
             default:
                 throw new Error(`Unknown session type: ${session.type}, generate failed`)

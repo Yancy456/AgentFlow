@@ -9,8 +9,7 @@ export default function TitleBar() {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
 
     return (
-        <div className='h-[30.5px] shrink-0 w-full bg-[#f2f2f2]'
-            style={{ '-webkit-app-region': 'drag' }}>
+        <div className="h-[30.5px] shrink-0 w-full bg-[#f2f2f2]" style={{ '-webkit-app-region': 'drag' }}>
             <img src={icon} className="w-6 h-6 ml-[13px] mt-[7px]" />
         </div>
     )

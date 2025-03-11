@@ -36,7 +36,7 @@ interface Props {
     setOpenSettingWindow(name: 'ai' | 'display' | null): void
 }
 
-export default function Sidebar(props: Props) {
+export default function ChatHistory(props: Props) {
     const { t } = useTranslation()
     const versionHook = useVersion()
 
@@ -50,7 +50,6 @@ export default function Sidebar(props: Props) {
     }
 
     const theme = useTheme()
-
     return (
         <div
             className="h-full"
@@ -70,8 +69,6 @@ export default function Sidebar(props: Props) {
                     }}
                 >
                     <SessionList sessionListRef={sessionListRef} />
-
-
                 </Stack>
             </div>
         </div>

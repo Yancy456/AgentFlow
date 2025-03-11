@@ -1,14 +1,10 @@
-import { Box } from '@mui/material'
-import InputBox from '@/components/InputBox'
-import MessageList from '@/components/MessageList'
-import Header from '@/components/Header'
-import ChatList from '@/ChatList'
-import MainPane from '@/MainPane'
+import ChatHistory from '@/ChatHistory'
+import ChatPane from '@/ChatPane'
 import React from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import * as atoms from '@/stores/atoms'
 
-interface Props { }
+interface Props {}
 export default function ChatView(props: Props) {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
 
@@ -18,13 +14,13 @@ export default function ChatView(props: Props) {
 
     const [openCopilotWindow, setOpenCopilotWindow] = React.useState(false)
     return (
-        <div className='h-full w-full flex'>
-            <ChatList
+        <div className="h-full w-full flex">
+            <ChatHistory
                 openCopilotWindow={() => setOpenCopilotWindow(true)}
                 openAboutWindow={() => setOpenAboutWindow(true)}
-                setOpenSettingWindow={setOpenSettingWindow} />
-
-            <MainPane />
+                setOpenSettingWindow={setOpenSettingWindow}
+            />
+            <ChatPane />
         </div>
     )
 }

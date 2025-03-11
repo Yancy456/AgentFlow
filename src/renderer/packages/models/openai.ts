@@ -34,9 +34,9 @@ export default class OpenAI extends Base {
         rawMessages: Message[],
         signal?: AbortSignal,
         onResultChange?: onResultChange
-    ): Promise<string> {
+    ): Promise<void> {
         try {
-            return await this._callChatCompletion(rawMessages, signal, onResultChange)
+            await this._callChatCompletion(rawMessages, signal, onResultChange)
         } catch (e) {
             if (
                 e instanceof ApiError &&
@@ -51,18 +51,18 @@ export default class OpenAI extends Base {
     async _callChatCompletion(
         rawMessages: Message[],
         signal?: AbortSignal,
-        onResultChange?: onResultChange
-    ): Promise<string> {
+        onResultChange: onResultChange
+    ): Promise<void> {
         const model = this.options.model === 'custom-model' ? this.options.openaiCustomModel || '' : this.options.model
 
         rawMessages = injectModelSystemPrompt(model, rawMessages)
 
-        if (model.startsWith('o1')) {
-            const messages = await populateO1Message(rawMessages)
-            return this.requestChatCompletionsNotStream({ model, messages }, signal, onResultChange)
-        }
+        //if (model.startsWith('o1')) {
+        //    const messages = await populateO1Message(rawMessages)
+        //    this.requestChatCompletionsNotStream({ model, messages }, signal, onResultChange)
+        //}
         const messages = await populateGPTMessage(rawMessages)
-        return this.requestChatCompletionsStream(
+        let response = await this.requestChatCompletionsNotStream(
             {
                 messages,
                 model,
@@ -75,57 +75,81 @@ export default class OpenAI extends Base {
                 top_p: this.options.topP,
                 stream: true,
             },
-            signal,
-            onResultChange
+            signal
         )
+        console.log(response)
+        console.log({ ...rawMessages[rawMessages.length - 1] })
+
+        Object.assign(rawMessages[messages.length - 1], {
+            content: response.content,
+            reasoning_content: response?.reasoning_content,
+        }) // update the last message in place, getting rid of complex return statement.
+        onResultChange()
+
+        //return this.requestChatCompletionsStream(
+        //    {
+        //        messages,
+        //        model,
+        //        // vision 模型的默认 max_tokens 极低，基本很难回答完整，因此手动设置为模型最大值
+        //        max_tokens:
+        //            this.options.model === 'gpt-4-vision-preview'
+        //                ? openaiModelConfigs['gpt-4-vision-preview'].maxTokens
+        //                : undefined,
+        //        temperature: this.options.temperature,
+        //        top_p: this.options.topP,
+        //        stream: true,
+        //    },
+        //    signal,
+        //    onResultChange
+        //)
     }
 
-    async requestChatCompletionsStream(
-        requestBody: Record<string, any>,
-        signal?: AbortSignal,
-        onResultChange?: onResultChange
-    ): Promise<string> {
-        //const apiPath = this.options.apiPath || '/v1/chat/completions'
-        const apiPath = this.options.apiPath || '/chat/completions'
-        const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
-        console.log('')
-        let result = ''
+    //async requestChatCompletionsStream(
+    //    requestBody: Record<string, any>,
+    //    signal?: AbortSignal,
+    //    onResultChange?: onResultChange
+    //): Promise<string> {
+    //    //const apiPath = this.options.apiPath || '/v1/chat/completions'
+    //    const apiPath = this.options.apiPath || '/chat/completions'
+    //    const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
+    //    let result = ''
+    //    console.log(response)
+    //    await this.handleSSE(response, (message) => {
+    //        if (message === '[DONE]') {
+    //            return
+    //        }
+    //        const data = JSON.parse(message)
+    //        if (data.error) {
+    //            throw new ApiError(`Error from OpenAI: ${JSON.stringify(data)}`)
+    //        }
+    //        const text = data.choices[0]?.delta?.content
+    //        if (text !== undefined) {
+    //            result += text
+    //            if (onResultChange) {
+    //                onResultChange(result)
+    //            }
+    //        }
+    //    })
 
-        await this.handleSSE(response, (message) => {
-            if (message === '[DONE]') {
-                return
-            }
-            const data = JSON.parse(message)
-            if (data.error) {
-                throw new ApiError(`Error from OpenAI: ${JSON.stringify(data)}`)
-            }
-            const text = data.choices[0]?.delta?.content
-            if (text !== undefined) {
-                result += text
-                if (onResultChange) {
-                    onResultChange(result)
-                }
-            }
-        })
-
-        return result
-    }
+    //    return result
+    //}
 
     async requestChatCompletionsNotStream(
         requestBody: Record<string, any>,
-        signal?: AbortSignal,
-        onResultChange?: onResultChange
-    ): Promise<string> {
+        signal?: AbortSignal
+    ): Promise<{ content: string; reasoning_content?: string }> {
+        // Send post request to get completion.
         const apiPath = this.options.apiPath || '/chat/completions'
         const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
         const json = await response.json()
         if (json.error) {
             throw new ApiError(`Error from OpenAI: ${JSON.stringify(json)}`)
         }
-        if (onResultChange) {
-            onResultChange(json.choices[0].message.content)
+
+        return {
+            content: json.choices[0].message.content,
+            reasoning_content: json.choices[0].message?.reasoning_content,
         }
-        return json.choices[0].message.content
     }
 
     getHeaders() {

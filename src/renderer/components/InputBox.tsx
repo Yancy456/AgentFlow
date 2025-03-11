@@ -21,7 +21,7 @@ export default function InputBox(props: Props) {
     const theme = useTheme()
     const setChatConfigDialogSession = useSetAtom(atoms.chatConfigDialogAtom)
     const { t } = useTranslation()
-    const [messageInput, setMessageInput] = useState('')
+    const [messageInput, setMessageInput] = useState('') // the variable that stores the input text, maybe rich text editor layer?
     const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
     const handleSubmit = (needGenerating = true) => {
@@ -29,6 +29,12 @@ export default function InputBox(props: Props) {
             return
         }
         const newMessage = createMessage('user', messageInput)
+        /*newMessage = {
+            id: uuidv4(),
+            content: content,
+            role: role,
+            timestamp: new Date().getTime(),
+        }*/
 
         sessionActions.submitNewUserMessage({
             currentSessionId: props.currentSessionId,
@@ -36,7 +42,7 @@ export default function InputBox(props: Props) {
             needGenerating,
         })
         setMessageInput('')
-        trackingEvent('send_message', { event_category: 'user' })
+        //trackingEvent('send_message', { event_category: 'user' }) // Telemetry data collection
     }
 
     const minTextareaHeight = 20
@@ -59,8 +65,6 @@ export default function InputBox(props: Props) {
             return
         }
     }
-
-    const [easterEgg, setEasterEgg] = useState(false)
 
     return (
         <div
