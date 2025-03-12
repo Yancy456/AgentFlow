@@ -131,5 +131,6 @@ export const configVersionAtom = atomWithStorage<number>(StorageKey.ConfigVersio
 export const messageListRefAtom = atom<null | React.MutableRefObject<HTMLDivElement | null>>(null)
 
 export const openSettingDialogAtom = atom<SettingWindowTab | null>(null)
+export const openCopilotWindowAtom = atom<boolean | null>(null)
 export const sessionCleanDialogAtom = atom<Session | null>(null)
 export const chatConfigDialogAtom = atom<Session | null>(null)

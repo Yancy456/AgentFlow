@@ -133,6 +133,7 @@ export default class Base {
                 })
                 if (!res.ok) {
                     const err = await res.text().catch((e) => null)
+                    console.log(`error:${err}`)
                     throw new ApiError(`Status Code ${res.status}, ${err}`)
                 }
                 //console.log(await res.json())

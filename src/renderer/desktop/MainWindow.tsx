@@ -26,7 +26,7 @@ export default function Main() {
 
     const [openAboutWindow, setOpenAboutWindow] = React.useState(false)
 
-    const [openCopilotWindow, setOpenCopilotWindow] = React.useState(false)
+    const [openCopilotWindow, setOpenCopilotWindow] = useAtom(atoms.openCopilotWindowAtom)
 
     return (
         <Router>

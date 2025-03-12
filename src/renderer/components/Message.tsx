@@ -221,7 +221,7 @@ export default function Message(props: Props) {
                                 </IconButton>
                                 <Collapse in={isOpen}>
                                     <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: 1, bgcolor: '#fff' }}>
-                                        <div>I think that ......</div>
+                                        <div>{msg.reasoning_content}</div>
                                     </Box>
                                 </Collapse>
                             </Box>

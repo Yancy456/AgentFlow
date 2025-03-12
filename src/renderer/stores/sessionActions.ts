@@ -242,6 +242,7 @@ export async function generate(sessionId: string, targetMsg: Message) {
                 }, 100)
                 console.log(messages)
                 console.log(targetMsg)
+
                 await model.chat(messages, throttledModifyMessage) // request model API to generate new Message
 
                 refreshMessage(sessionId, messages, messages.length - 1) // Based on the returned targetMsg, modify the old seesion message

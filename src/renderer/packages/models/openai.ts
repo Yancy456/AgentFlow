@@ -51,17 +51,18 @@ export default class OpenAI extends Base {
     async _callChatCompletion(
         rawMessages: Message[],
         signal?: AbortSignal,
-        onResultChange: onResultChange
+        onResultChange?: onResultChange
     ): Promise<void> {
         const model = this.options.model === 'custom-model' ? this.options.openaiCustomModel || '' : this.options.model
 
-        rawMessages = injectModelSystemPrompt(model, rawMessages)
+        //rawMessages = injectModelSystemPrompt(model, rawMessages)
 
         //if (model.startsWith('o1')) {
         //    const messages = await populateO1Message(rawMessages)
         //    this.requestChatCompletionsNotStream({ model, messages }, signal, onResultChange)
         //}
-        const messages = await populateGPTMessage(rawMessages)
+
+        const messages = await populateGPTMessage(rawMessages.slice(1, rawMessages.length - 1))
         let response = await this.requestChatCompletionsNotStream(
             {
                 messages,
@@ -73,18 +74,18 @@ export default class OpenAI extends Base {
                         : undefined,
                 temperature: this.options.temperature,
                 top_p: this.options.topP,
-                stream: true,
+                stream: false,
             },
             signal
         )
-        console.log(response)
-        console.log({ ...rawMessages[rawMessages.length - 1] })
 
-        Object.assign(rawMessages[messages.length - 1], {
+        Object.assign(rawMessages[rawMessages.length - 1], {
             content: response.content,
             reasoning_content: response?.reasoning_content,
         }) // update the last message in place, getting rid of complex return statement.
-        onResultChange()
+        if (onResultChange) {
+            onResultChange()
+        }
 
         //return this.requestChatCompletionsStream(
         //    {
@@ -140,8 +141,13 @@ export default class OpenAI extends Base {
     ): Promise<{ content: string; reasoning_content?: string }> {
         // Send post request to get completion.
         const apiPath = this.options.apiPath || '/chat/completions'
+
+        console.log(`response json:${JSON.stringify(requestBody, null, 2)}`)
+
         const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
         const json = await response.json()
+
+        console.log(`response json:${json}`)
         if (json.error) {
             throw new ApiError(`Error from OpenAI: ${JSON.stringify(json)}`)
         }
@@ -153,7 +159,6 @@ export default class OpenAI extends Base {
     }
 
     getHeaders() {
-        console.log(this.options.openaiKey)
         const headers: Record<string, string> = {
             Authorization: `Bearer ${this.options.openaiKey}`,
             'Content-Type': 'application/json',
