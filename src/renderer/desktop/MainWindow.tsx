@@ -34,7 +34,7 @@ export default function Main() {
                 <TitleBar />
 
                 <div className="grow w-full flex overflow-auto">
-                    <MenuBar />
+                    {/*<MenuBar />*/}
 
                     <div
                         className="rounded-sm border-t-[0.5px] border-l-[0.5px] border-[#00000028] grow h-full border-solid"
@@ -56,8 +56,8 @@ export default function Main() {
                 <AboutWindow open={openAboutWindow} close={() => setOpenAboutWindow(false)} />
                 <ChatConfigWindow />
                 <CleanWidnow />
-                <CopilotWindow open={openCopilotWindow} close={() => setOpenCopilotWindow(false)} />
-                <RemoteDialogWindow />
+                {/*<CopilotWindow open={openCopilotWindow} close={() => setOpenCopilotWindow(false)} />*/}
+                {/*<RemoteDialogWindow />*/}
                 <Toasts />
             </Box>
         </Router>

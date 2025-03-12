@@ -1,15 +1,75 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
-<div style=" display: flex;flex-direction:column;height:80px;width:200px;">
-    <div style="height: 60px;background-color:red">
-        123
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Square Border Loading Indicator</title>
+    <style>
+        /* Container for the loader */
+        .loader {
+            position: relative;
+            width: 100px;
+            /* Square dimensions */
+            height: 100px;
+            margin: 50px auto;
+            /* centers on the page */
+        }
+
+        /* Visual square (background) */
+        .loader .square {
+            width: 100px;
+            height: 100px;
+            background-color: #f0f0f0;
+        }
+
+        /* SVG overlay to animate the square border */
+        .loader svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+            /* Rotate so the animation starts at the top */
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader svg rect {
+            fill: none;
+            stroke: #007bff;
+            /* Color of the progress indicator */
+            stroke-width: 5;
+            /* For a square of 100x100, with a slight inset for stroke,
+         the rect’s width/height are set to 95 to yield a perimeter of approximately 380-400px.
+         Here we assume the total path length is 400 (adjust accordingly if you change dimensions). */
+            stroke-dasharray: 25 375;
+            /* 25px dash (visible segment), 375px gap; total = 400 */
+            stroke-dashoffset: 0;
+            animation: progress 2s linear infinite;
+        }
+
+        /* Animate the stroke-dashoffset from 0 to a negative value equal to the path length */
+        @keyframes progress {
+            from {
+                stroke-dashoffset: 0;
+            }
+
+            to {
+                stroke-dashoffset: -400;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loader">
+        <!-- The square background -->
+        <div class="square"></div>
+        <!-- SVG with a square path. The x/y and width/height are chosen so that the stroke appears aligned with the square -->
+        <svg viewBox="0 0 100 100">
+            <rect x="2.5" y="2.5" width="95" height="95" />
+        </svg>
     </div>
-
-    <div style="background-color:green;display:flex">
-        <div style="height: 30px;"></div>
-        <div style="height: 30px;"></div>
-    </div>
-</div>
-
+</body>
 
 </html>
