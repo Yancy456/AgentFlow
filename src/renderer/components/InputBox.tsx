@@ -22,9 +22,10 @@ export default function InputBox(props: Props) {
     const setChatConfigDialogSession = useSetAtom(atoms.chatConfigDialogAtom)
     const { t } = useTranslation()
     const [messageInput, setMessageInput] = useState('') // the variable that stores the input text, maybe rich text editor layer?
+    const [generating, setGenerating] = useState(false)
     const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
-    const handleSubmit = (needGenerating = true) => {
+    const handleSubmit = async (needGenerating = true) => {
         if (messageInput.trim() === '') {
             return
         }
@@ -35,13 +36,15 @@ export default function InputBox(props: Props) {
             role: role,
             timestamp: new Date().getTime(),
         }*/
-
-        sessionActions.submitNewUserMessage({
+        setMessageInput('')
+        setGenerating(true)
+        await sessionActions.submitNewUserMessage({
             currentSessionId: props.currentSessionId,
             newUserMsg: newMessage,
             needGenerating,
         })
-        setMessageInput('')
+        setGenerating(false)
+
         //trackingEvent('send_message', { event_category: 'user' }) // Telemetry data collection
     }
 
@@ -118,26 +121,65 @@ export default function InputBox(props: Props) {
                     </div>
                     <div className="flex flex-row items-center">
                         <MiniButton
-                            className="w-8 ml-2"
-                            style={
-                                {
-                                    //color: theme.palette.getContrastText(theme.palette.primary.main),
-                                    //backgroundColor: theme.palette.primary.main,
-                                }
-                            }
+                            className="w-8 ml-2 relative"
+                            style={{
+                                opacity: generating ? 0.7 : 1,
+                                cursor: generating ? 'not-allowed' : 'pointer',
+                            }}
                             tooltipTitle={
                                 <Typography variant="caption">
                                     {t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}
                                 </Typography>
                             }
                             tooltipPlacement="top"
-                            onClick={() => handleSubmit()}
+                            onClick={() => !generating && handleSubmit()}
+                            disabled={generating}
                         >
-                            <SendHorizontal size="20" strokeWidth={1} />
+                            {generating ? (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="relative w-full h-full">
+                                        <svg
+                                            className="absolute inset-0 w-full h-full"
+                                            style={{ transform: 'rotate(-90deg)' }}
+                                            viewBox="0 0 100 100"
+                                        >
+                                            <rect
+                                                x="2.5"
+                                                y="2.5"
+                                                width="95"
+                                                height="95"
+                                                fill="none"
+                                                stroke={theme.palette.primary.main}
+                                                strokeWidth="5"
+                                                strokeDasharray="25 375"
+                                                strokeDashoffset="0"
+                                                style={{
+                                                    animation: 'progress 2s linear infinite',
+                                                }}
+                                            />
+                                        </svg>
+                                        <SendHorizontal size="20" strokeWidth={1} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <SendHorizontal size="20" strokeWidth={1} />
+                            )}
                         </MiniButton>
                     </div>
                 </div>
             </div>
+            <style>
+                {`
+                    @keyframes progress {
+                        from {
+                            stroke-dashoffset: 0;
+                        }
+                        to {
+                            stroke-dashoffset: -400;
+                        }
+                    }
+                `}
+            </style>
         </div>
     )
 }

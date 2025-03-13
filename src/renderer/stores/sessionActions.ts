@@ -194,7 +194,7 @@ export async function submitNewUserMessage(params: {
         insertMessage(currentSessionId, newAssistantMsg)
     }
     if (needGenerating) {
-        return generate(currentSessionId, newAssistantMsg)
+        return await generate(currentSessionId, newAssistantMsg)
     }
 }
 
