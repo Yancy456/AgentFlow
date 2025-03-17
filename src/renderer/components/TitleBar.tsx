@@ -1,175 +1,95 @@
-import Box from '@mui/material/Box'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import React, { useState } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
 import * as atoms from '../stores/atoms'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@mui/material'
+import { Menu as MenuIcon } from 'lucide-react'
 import icon from '@/static/icon.png'
-import { Button, IconButton, Menu, MenuItem } from '@mui/material'
-import React, { useState } from 'react'
-import { AlignJustify, ChevronRightIcon, MenuIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import TitleMenu from './TitleMenu'
+import { useNavigate } from 'react-router-dom'
+
 export default function TitleBar() {
-    const { t } = useTranslation()
     const currentSession = useAtomValue(atoms.currentSessionAtom)
-
-    const [anchorEl, setAnchorEl] = useState(null)
-    const open = Boolean(anchorEl)
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
-
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
-    const [subFileAnchorEl, setSubFileAnchorEl] = useState(null)
-
-    const handleOpenMenu = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
-
-    const handleCloseMenu = () => {
-        setAnchorEl(null)
-        setSubFileAnchorEl(null) // Close any open submenus too
-    }
-
-    const handleFileSubMenuOpen = (event) => {
-        setSubFileAnchorEl(event.currentTarget)
-    }
-
-    const handleSubMenuClose = () => {
-        setSubFileAnchorEl(null)
-    }
     const [openSettingWindow, setOpenSettingWindow] = useAtom(atoms.openSettingDialogAtom)
+    const navigate = useNavigate()
+
+    // 主菜单状态
+    const [mainMenuAnchorEl, setMainMenuAnchorEl] = useState<null | HTMLElement>(null)
+    const mainMenuOpen = Boolean(mainMenuAnchorEl)
+
+    // 打开主菜单
+    const handleMainMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setMainMenuAnchorEl(event.currentTarget)
+    }
+
+    // 关闭主菜单
+    const handleMainMenuClose = () => {
+        setMainMenuAnchorEl(null)
+    }
+    const { t } = useTranslation()
+    // 定义菜单项
+    const menuItems = [
+        {
+            name: t('File'),
+            subMenu: [
+                { name: t('New'), click: () => console.log('New file') },
+                { name: t('Open'), click: () => console.log('Open file') },
+                { name: t('Save'), click: () => console.log('Save file') },
+            ],
+        },
+        {
+            name: t('View'),
+            subMenu: [
+                { name: t('Chat'), click: () => navigate('/') },
+                { name: t('Agent Design'), click: () => navigate('/AgentFlow') },
+            ],
+        },
+        {
+            name: t('Settings'),
+            click: () => setOpenSettingWindow('ai'),
+        },
+        {
+            name: t('Help'),
+            subMenu: [
+                { name: t('About'), click: () => console.log('About') },
+                { name: t('Documentation'), click: () => console.log('Documentation') },
+            ],
+        },
+    ]
+
+    // 标题栏配置
+    const title = 'ChatFlow'
+
     return (
         <div
             className="h-[30.5px] shrink-0 w-full bg-[#f2f2f2] flex content-center items-center justify-between"
-            style={{ '-webkit-app-region': 'drag' }}
+            style={{ WebkitAppRegion: 'drag' }}
         >
             <div className="h-full flex content-center">
-                <div style={{ '-webkit-app-region': 'none' }}>
+                <div style={{ WebkitAppRegion: 'none' }}>
                     <IconButton
                         id="icon-button"
-                        aria-controls={open ? 'icon-menu' : undefined}
+                        aria-controls={mainMenuOpen ? 'main-menu' : undefined}
                         aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
+                        aria-expanded={mainMenuOpen ? 'true' : undefined}
+                        onClick={handleMainMenuOpen}
                         disableRipple
                     >
-                        <MenuIcon size="20" strokeWidth={1.5} color="black" />
+                        <MenuIcon size={20} strokeWidth={1.5} color="black" />
                     </IconButton>
                 </div>
 
-                <img src={icon} className="w-5 h-5  mt-[7px]" />
+                <img src={icon} className="w-5 h-5 mt-[7px]" alt="ChatFlow Icon" />
             </div>
-            <div>ChatFlow</div>
+            <div>{title}</div>
             <div className="w-[150px]"></div>
-            <Menu
-                id="menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleCloseMenu}
-                MenuListProps={{
-                    'aria-labelledby': 'menu-button',
-                }}
-                sx={{
-                    '& .MuiPaper-root': {
-                        borderRadius: '12px',
-                        boxShadow: '1px',
-                    },
-                }}
-            >
-                <MenuItem onClick={handleFileSubMenuOpen}>
-                    <div className="w-full flex justify-between">
-                        <div>File</div>
 
-                        <ChevronRightIcon size="20" strokeWidth={1.5} />
-                    </div>
-                </MenuItem>
-                <Menu
-                    id="sub-menu"
-                    anchorEl={subFileAnchorEl}
-                    open={Boolean(subFileAnchorEl)}
-                    onClose={handleSubMenuClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'submenu-button',
-                    }}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right', // Align submenu to the right of the main menu
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    sx={{
-                        '& .MuiPaper-root': {
-                            borderRadius: '12px',
-                            boxShadow: '1px',
-                        },
-                    }}
-                >
-                    <MenuItem onClick={handleSubMenuClose}>New</MenuItem>
-                    <MenuItem onClick={handleSubMenuClose}>Open</MenuItem>
-                    <MenuItem onClick={handleSubMenuClose}>Save</MenuItem>
-                </Menu>
-
-                <MenuItem onClick={handleFileSubMenuOpen}>
-                    <div className="w-full flex justify-between">
-                        <div>View</div>
-
-                        <ChevronRightIcon size="20" strokeWidth={1.5} />
-                    </div>
-                </MenuItem>
-                <Menu
-                    id="sub-menu"
-                    anchorEl={subFileAnchorEl}
-                    open={Boolean(subFileAnchorEl)}
-                    onClose={handleSubMenuClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'submenu-button',
-                    }}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right', // Align submenu to the right of the main menu
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    sx={{
-                        '& .MuiPaper-root': {
-                            borderRadius: '12px',
-                            boxShadow: '1px',
-                        },
-                    }}
-                >
-                    <MenuItem>
-                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            Chat
-                        </Link>
-                    </MenuItem>
-                    <MenuItem>
-                        <Link to="/AgentFlow" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            Agent Design
-                        </Link>
-                    </MenuItem>
-                </Menu>
-
-                <MenuItem onClick={() => setOpenSettingWindow('ai')}>
-                    <div className="w-full flex justify-between">
-                        <div>Settings</div>
-
-                        <ChevronRightIcon size="20" strokeWidth={1.5} />
-                    </div>
-                </MenuItem>
-
-                <MenuItem onClick={handleCloseMenu}>
-                    <div className="w-full flex justify-between">
-                        <div>Help</div>
-                        <ChevronRightIcon size="20" strokeWidth={1.5} />
-                    </div>
-                </MenuItem>
-            </Menu>
+            <TitleMenu
+                menuItems={menuItems}
+                mainMenuAnchorEl={mainMenuAnchorEl}
+                mainMenuOpen={mainMenuOpen}
+                handleMainMenuClose={handleMainMenuClose}
+            />
         </div>
     )
 }
