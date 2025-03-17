@@ -10,9 +10,7 @@ import { Message, SessionType } from '@/stores/session/data'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     showMessageTimestampAtom,
-    showModelNameAtom,
     showTokenCountAtom,
-    showWordCountAtom,
     openSettingDialogAtom,
     enableMarkdownRenderingAtom,
 } from '../stores/atoms'
@@ -24,7 +22,6 @@ import MessageErrTips from './MessageErrTips'
 import * as dateFns from 'date-fns'
 import { cn } from '@/lib/utils'
 import { estimateTokensFromMessages } from '@/packages/token'
-import { countWord } from '@/packages/word-count'
 import { Collapse, IconButton, TextField, Button } from '@mui/material'
 import * as React from 'react'
 import { ChevronRight } from 'lucide-react'
@@ -45,9 +42,7 @@ export default function Message(props: Props) {
     const theme = useTheme()
 
     const showMessageTimestamp = useAtomValue(showMessageTimestampAtom)
-    const showModelName = useAtomValue(showModelNameAtom)
     const showTokenCount = useAtomValue(showTokenCountAtom)
-    const showWordCount = useAtomValue(showWordCountAtom)
     const showTokenUsed = useAtomValue(showTokenUsedAtom)
     const enableMarkdownRendering = useAtomValue(enableMarkdownRenderingAtom)
     const currentSessionPicUrl = useAtomValue(currsentSessionPicUrlAtom)
@@ -66,9 +61,6 @@ export default function Message(props: Props) {
 
     const tips: string[] = []
     if (props.sessionType === 'chat' || !props.sessionType) {
-        if (showWordCount && !msg.generating) {
-            tips.push(`word count: ${msg.wordCount !== undefined ? msg.wordCount : countWord(msg.content)}`)
-        }
         if (showTokenCount && !msg.generating) {
             if (msg.tokenCount === undefined) {
                 msg.tokenCount = estimateTokensFromMessages([msg])
@@ -77,9 +69,6 @@ export default function Message(props: Props) {
         }
         if (showTokenUsed && msg.role === 'assistant' && !msg.generating) {
             tips.push(`tokens used: ${msg.tokensUsed || 'unknown'}`)
-        }
-        if (showModelName && props.msg.role === 'assistant') {
-            tips.push(`model: ${props.msg.model || 'unknown'}`)
         }
     }
 

@@ -32,7 +32,7 @@ export default function TitleBar() {
         {
             name: t('File'),
             subMenu: [
-                { name: t('New'), click: () => console.log('New file') },
+                { name: t('Open Work Space'), click: () => console.log('New file') },
                 { name: t('Open'), click: () => console.log('Open file') },
                 { name: t('Save'), click: () => console.log('Save file') },
             ],

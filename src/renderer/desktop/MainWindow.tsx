@@ -17,7 +17,7 @@ import TitleBar from '@/components/TitleBar'
 import MenuBar from '@/components/MenuBar'
 import ChatView from '@/desktop/ChatView'
 import AgentFlow from '@/desktop/AgentFlow'
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 
 export default function Main() {
     const spellCheck = useAtomValue(atoms.spellCheckAtom)
@@ -44,6 +44,7 @@ export default function Main() {
                             <Route path="/" element={<ChatView />} />
                             <Route path="/AgentFlow" element={<AgentFlow />} />
                             {/*<Route path="/about" element={<About />} />*/}
+                            <Route path="*" element={<Navigate to="/" replace />} />
                         </Routes>
                     </div>
                 </div>

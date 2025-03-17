@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import * as atoms from '../stores/atoms'
 import { useSetAtom } from 'jotai'
 import * as sessionActions from '../stores/sessionActions'
-import { SendHorizontal, Settings2 } from 'lucide-react'
+import { Paperclip, SendHorizontal, Settings2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import icon from '../static/icon.png'
 import { trackingEvent } from '@/packages/event'
@@ -104,7 +104,7 @@ export default function InputBox(props: Props) {
                     className="flex flex-row flex-nowrap justify-between"
                     //className="flex flex-row flex-nowrap justify-between py-1"
                 >
-                    <div className="flex flex-row items-center">
+                    {/*<div className="flex flex-row items-center">
                         <MiniButton
                             className="mr-2"
                             style={{ color: theme.palette.text.primary }}
@@ -118,10 +118,23 @@ export default function InputBox(props: Props) {
                         >
                             <Settings2 size="20" strokeWidth={1} />
                         </MiniButton>
-                    </div>
+                    </div>*/}
                     <div className="flex flex-row items-center">
                         <MiniButton
-                            className="w-8 ml-2 relative"
+                            className=" relative"
+                            style={{
+                                opacity: generating ? 0.7 : 1,
+                                cursor: generating ? 'not-allowed' : 'pointer',
+                            }}
+                            tooltipTitle={<Typography variant="caption">{t('Attach files')}</Typography>}
+                            tooltipPlacement="top"
+                            onClick={() => !generating && handleSubmit()}
+                            disabled={generating}
+                        >
+                            <Paperclip size="20" strokeWidth={1} />
+                        </MiniButton>
+                        <MiniButton
+                            className=" relative"
                             style={{
                                 opacity: generating ? 0.7 : 1,
                                 cursor: generating ? 'not-allowed' : 'pointer',
@@ -136,30 +149,28 @@ export default function InputBox(props: Props) {
                             disabled={generating}
                         >
                             {generating ? (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="relative w-full h-full">
-                                        <svg
-                                            className="absolute inset-0 w-full h-full"
-                                            style={{ transform: 'rotate(-90deg)' }}
-                                            viewBox="0 0 100 100"
-                                        >
-                                            <rect
-                                                x="2.5"
-                                                y="2.5"
-                                                width="95"
-                                                height="95"
-                                                fill="none"
-                                                stroke={theme.palette.primary.main}
-                                                strokeWidth="5"
-                                                strokeDasharray="25 375"
-                                                strokeDashoffset="0"
-                                                style={{
-                                                    animation: 'progress 2s linear infinite',
-                                                }}
-                                            />
-                                        </svg>
-                                        <SendHorizontal size="20" strokeWidth={1} />
-                                    </div>
+                                <div className="relative w-full h-full">
+                                    <svg
+                                        className="absolute inset-0 w-full h-full"
+                                        style={{ transform: 'rotate(-90deg)' }}
+                                        viewBox="0 0 100 100"
+                                    >
+                                        <rect
+                                            x="2.5"
+                                            y="2.5"
+                                            width="95"
+                                            height="95"
+                                            fill="none"
+                                            stroke={theme.palette.primary.main}
+                                            strokeWidth="5"
+                                            strokeDasharray="25 375"
+                                            strokeDashoffset="0"
+                                            style={{
+                                                animation: 'progress 2s linear infinite',
+                                            }}
+                                        />
+                                    </svg>
+                                    <SendHorizontal size="20" strokeWidth={1} />
                                 </div>
                             ) : (
                                 <SendHorizontal size="20" strokeWidth={1} />
