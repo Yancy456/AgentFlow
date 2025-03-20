@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Typography, useTheme } from '@mui/material'
 import * as atoms from '../stores/atoms'
 import { useAtomValue, useSetAtom } from 'jotai'
-import * as sessionActions from '../stores/sessionActions'
+import * as sessionActions from '../stores/session/sessionActions'
 import Toolbar from './Toolbar'
 import { cn } from '@/lib/utils'
 

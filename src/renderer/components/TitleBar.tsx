@@ -1,107 +1,95 @@
 import Box from '@mui/material/Box'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import * as atoms from '../stores/atoms'
 import { useTranslation } from 'react-i18next'
-import icon from '@/static/icon.png'
 import { IconButton } from '@mui/material'
+import { Menu as MenuIcon } from 'lucide-react'
+import icon from '@/static/icon.png'
+import { Button, IconButton, Menu, MenuItem } from '@mui/material'
 import React, { useState } from 'react'
-import { MenuIcon } from 'lucide-react'
-import TitleMenu from './TitleMenu'
-
+import { AlignJustify, ChevronRightIcon, MenuIcon } from 'lucide-react'
+import { Link } from 'react-router-dom'
 export default function TitleBar() {
-    const { t } = useTranslation()
     const currentSession = useAtomValue(atoms.currentSessionAtom)
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [openSettingWindow, setOpenSettingWindow] = useAtom(atoms.openSettingDialogAtom)
+    const navigate = useNavigate()
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget)
-        setIsMenuOpen(!isMenuOpen)
+    // 主菜单状态
+    const [mainMenuAnchorEl, setMainMenuAnchorEl] = useState<null | HTMLElement>(null)
+    const mainMenuOpen = Boolean(mainMenuAnchorEl)
+
+    // 打开主菜单
+    const handleMainMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setMainMenuAnchorEl(event.currentTarget)
     }
 
-    const handleClose = () => {
-        setAnchorEl(null)
-        setIsMenuOpen(false)
+    // 关闭主菜单
+    const handleMainMenuClose = () => {
+        setMainMenuAnchorEl(null)
     }
+    const { t } = useTranslation()
+    // 定义菜单项
+    const menuItems = [
+        {
+            name: t('File'),
+            subMenu: [
+                { name: t('Open Work Space'), click: () => console.log('New file') },
+                { name: t('Open'), click: () => console.log('Open file') },
+                { name: t('Save'), click: () => console.log('Save file') },
+            ],
+        },
+        {
+            name: t('View'),
+            subMenu: [
+                { name: t('Chat'), click: () => navigate('/') },
+                { name: t('Agent Design'), click: () => navigate('/AgentFlow') },
+            ],
+        },
+        {
+            name: t('Settings'),
+            click: () => setOpenSettingWindow('ai'),
+        },
+        {
+            name: t('Help'),
+            subMenu: [
+                { name: t('About'), click: () => console.log('About') },
+                { name: t('Documentation'), click: () => console.log('Documentation') },
+            ],
+        },
+    ]
+
+    // 标题栏配置
+    const title = 'ChatFlow'
 
     return (
         <div
             className="h-[30.5px] shrink-0 w-full bg-[#f2f2f2] flex content-center items-center justify-between"
-            style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+            style={{ '-webkit-app-region': 'drag' }}
         >
             <div className="h-full flex content-center">
-                <div style={{ WebkitAppRegion: 'none' } as React.CSSProperties}>
-                    <IconButton id="icon-button" onClick={handleClick} disableRipple>
+                <div style={{ '-webkit-app-region': 'none' }}>
+                    <IconButton
+                        id="icon-button"
+                        aria-controls={open ? 'icon-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        disableRipple
+                    >
                         <MenuIcon size="20" strokeWidth={1.5} color="black" />
                     </IconButton>
                 </div>
 
-                <img src={icon} className="w-5 h-5  mt-[7px]" />
+                <img src={icon} className="w-5 h-5 mt-[7px]" alt="ChatFlow Icon" />
             </div>
-            <div>ChatFlow</div>
+            <div>{title}</div>
             <div className="w-[150px]"></div>
+
             <TitleMenu
-                isOpen={isMenuOpen}
-                menuItems={[
-                    {
-                        name: 'File',
-                        onClick: () => {
-                            console.log('New Chat')
-                        },
-                        subMenuItems: [
-                            {
-                                name: 'New Chat',
-                                onClick: () => {
-                                    console.log('New Chat')
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        name: 'View',
-                        onClick: () => {
-                            console.log('Edit')
-                        },
-                        subMenuItems: [
-                            {
-                                name: 'New Chat',
-                                onClick: () => {
-                                    console.log('New Chat')
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        name: 'Settings',
-                        onClick: () => {
-                            console.log('Settings')
-                        },
-                        subMenuItems: [
-                            {
-                                name: 'New Chat',
-                                onClick: () => {
-                                    console.log('New Chat')
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        name: 'Agent',
-                        onClick: () => {
-                            console.log('Help')
-                        },
-                        subMenuItems: [
-                            {
-                                name: 'New Chat',
-                                onClick: () => {
-                                    console.log('New Chat')
-                                },
-                            },
-                        ],
-                    },
-                ]}
-                anchorEl={anchorEl}
-                onClose={handleClose}
+                menuItems={menuItems}
+                mainMenuAnchorEl={mainMenuAnchorEl}
+                mainMenuOpen={mainMenuOpen}
+                handleMainMenuClose={handleMainMenuClose}
             />
         </div>
     )

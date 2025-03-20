@@ -1,14 +1,14 @@
 import { getDefaultStore } from 'jotai'
-import { Settings, createMessage } from '../../shared/types'
+import { Settings, createMessage } from '../../../shared/types'
 
 import { Message, Session } from '@/stores/session/data'
 
-import * as atoms from './atoms'
-import * as promptFormat from '../packages/prompts'
+import * as atoms from '../atoms'
+import * as promptFormat from '../../packages/prompts'
 import * as Sentry from '@sentry/react'
 import { v4 as uuidv4 } from 'uuid'
-import * as defaults from '../../shared/defaults'
-import * as scrollActions from './scrollActions'
+import * as defaults from '../../../shared/defaults'
+import * as scrollActions from '../scrollActions'
 import { getModel, getModelDisplayName } from '@/packages/models'
 import {
     AIProviderNoImplementedPaintError,
@@ -17,11 +17,11 @@ import {
     BaseError,
     ChatboxAIAPIError,
 } from '@/packages/models/errors'
-import platform from '../packages/platform'
+import platform from '../../packages/platform'
 import { throttle } from 'lodash'
 import { countWord } from '@/packages/word-count'
 import { estimateTokensFromMessages } from '@/packages/token'
-import * as settingActions from './settingActions'
+import * as settingActions from '../settingActions'
 
 export function create(newSession: Session) {
     const store = getDefaultStore()
