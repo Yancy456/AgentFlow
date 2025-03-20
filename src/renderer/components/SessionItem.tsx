@@ -9,7 +9,7 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined'
 import DeleteIcon from '@mui/icons-material/Delete'
 import StyledMenu from './StyledMenu'
 import { useTranslation } from 'react-i18next'
-import * as sessionActions from '../stores/sessionActions'
+import * as sessionActions from '../stores/session/sessionActions'
 import * as atoms from '@/stores/atoms'
 import { cn } from '@/lib/utils'
 

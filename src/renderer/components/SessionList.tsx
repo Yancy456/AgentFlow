@@ -17,7 +17,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import * as sessionActions from '@/stores/sessionActions'
+import * as sessionActions from '@/stores/session/sessionActions'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
 import { useTranslation } from 'react-i18next'
 export interface Props {

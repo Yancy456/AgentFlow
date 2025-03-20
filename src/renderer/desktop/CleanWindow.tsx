@@ -2,7 +2,7 @@ import { Button, Dialog, DialogContent, DialogActions, DialogTitle, DialogConten
 import { useTranslation } from 'react-i18next'
 import * as atoms from '../stores/atoms'
 import { useAtom } from 'jotai'
-import * as sessionActions from '../stores/sessionActions'
+import * as sessionActions from '../stores/session/sessionActions'
 import { trackingEvent } from '@/packages/event'
 
 interface Props {}

@@ -4,7 +4,7 @@ import { SessionType, createMessage } from '../../shared/types'
 import { useTranslation } from 'react-i18next'
 import * as atoms from '../stores/atoms'
 import { useSetAtom } from 'jotai'
-import * as sessionActions from '../stores/sessionActions'
+import * as sessionActions from '../stores/session/sessionActions'
 import { Paperclip, SendHorizontal, Settings2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import icon from '../static/icon.png'
@@ -30,7 +30,7 @@ export default function InputBox(props: Props) {
             return
         }
         const newMessage = createMessage('user', messageInput)
-        /*newMessage = {
+        /*format of newMessage = {
             id: uuidv4(),
             content: content,
             role: role,

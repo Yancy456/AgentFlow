@@ -43,6 +43,7 @@ const MenuItemWithSubMenu = ({
 
     const handleSubMenuOpen = (event: React.MouseEvent<HTMLLIElement>) => {
         event.stopPropagation()
+        event.preventDefault()
         setAnchorEl(event.currentTarget)
     }
 
@@ -50,9 +51,16 @@ const MenuItemWithSubMenu = ({
         setAnchorEl(null)
     }
 
-    const handleSubItemClick = (subItem: MenuItemDefinition) => {
+    const handleSubItemClick = (subItem: MenuItemDefinition, event?: React.MouseEvent) => {
+        // 阻止冒泡，只处理子菜单项的点击
+        event?.stopPropagation()
         handleMenuItemClick(subItem)
         handleSubMenuClose()
+        // 如果子菜单项有点击处理函数，则只关闭子菜单
+        // 如果没有子菜单，则关闭整个主菜单
+        if (!subItem.subMenu && subItem.click) {
+            handleMainMenuClose()
+        }
     }
 
     return (
@@ -61,7 +69,14 @@ const MenuItemWithSubMenu = ({
                 ref={menuRef}
                 id={item.name}
                 disableRipple
-                onClick={item.subMenu && item.subMenu.length > 0 ? handleSubMenuOpen : () => handleMenuItemClick(item)}
+                onClick={
+                    item.subMenu && item.subMenu.length > 0
+                        ? handleSubMenuOpen
+                        : (event) => {
+                              event.stopPropagation()
+                              handleMenuItemClick(item)
+                          }
+                }
             >
                 <div className="w-full flex justify-between">
                     <div>{item.name}</div>
@@ -75,17 +90,21 @@ const MenuItemWithSubMenu = ({
                     open={Boolean(anchorEl)}
                     onClose={(event, reason) => {
                         handleSubMenuClose()
-                        if (
-                            reason === 'backdropClick' ||
-                            reason === 'escapeKeyDown' ||
-                            !document.activeElement?.closest('.MuiMenu-root')
-                        ) {
-                            handleMainMenuClose()
-                        }
                     }}
                     MenuListProps={{
                         'aria-labelledby': item.name,
                     }}
+                    onClick={(e) => e.stopPropagation()}
+                    disableAutoFocusItem
+                    sx={{
+                        '& .MuiPaper-root': {
+                            borderRadius: '12px',
+                            boxShadow: '1px',
+                            zIndex: 1400,
+                        },
+                    }}
+                    disablePortal={false}
+                    disableRestoreFocus
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
@@ -94,18 +113,12 @@ const MenuItemWithSubMenu = ({
                         vertical: 'top',
                         horizontal: 'left',
                     }}
-                    sx={{
-                        '& .MuiPaper-root': {
-                            borderRadius: '12px',
-                            boxShadow: '1px',
-                        },
-                    }}
                 >
                     {item.subMenu.map((subItem, index) => (
                         <MenuItem
                             key={`${item.name}-submenu-item-${index}`}
                             disableRipple
-                            onClick={() => handleSubItemClick(subItem)}
+                            onClick={(event) => handleSubItemClick(subItem, event)}
                         >
                             <div className="w-full flex justify-between">
                                 <div>{subItem.name}</div>
@@ -167,10 +180,14 @@ export default function TitleMenu({ menuItems, mainMenuAnchorEl, mainMenuOpen, h
                 'aria-labelledby': 'main-menu-button',
             }}
             disableAutoFocusItem
+            // 确保主菜单不会因为子菜单的点击而关闭
+            keepMounted
+            // 设置主菜单的z-index
             sx={{
                 '& .MuiPaper-root': {
                     borderRadius: '12px',
                     boxShadow: '1px',
+                    zIndex: 1300, // 确保比子菜单的z-index低
                 },
             }}
         >
