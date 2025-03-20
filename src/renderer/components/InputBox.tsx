@@ -121,7 +121,7 @@ export default function InputBox(props: Props) {
                     </div>
                     <div className="flex flex-row items-center">
                         <MiniButton
-                            className="w-8 ml-2 relative"
+                            className="w-7 h-7 ml-2 relative"
                             style={{
                                 opacity: generating ? 0.7 : 1,
                                 cursor: generating ? 'not-allowed' : 'pointer',
@@ -137,7 +137,7 @@ export default function InputBox(props: Props) {
                         >
                             {generating ? (
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="relative w-full h-full">
+                                    <div className="relative w-full h-full flex items-center justify-center">
                                         <svg
                                             className="absolute inset-0 w-full h-full"
                                             style={{ transform: 'rotate(-90deg)' }}
@@ -150,19 +150,23 @@ export default function InputBox(props: Props) {
                                                 height="95"
                                                 fill="none"
                                                 stroke={theme.palette.primary.main}
-                                                strokeWidth="5"
-                                                strokeDasharray="25 375"
+                                                strokeWidth="12"
+                                                strokeDasharray="40 360"
                                                 strokeDashoffset="0"
                                                 style={{
                                                     animation: 'progress 2s linear infinite',
                                                 }}
                                             />
                                         </svg>
-                                        <SendHorizontal size="20" strokeWidth={1} />
+                                        <div className="relative z-10 flex items-center justify-center w-full h-full">
+                                            <SendHorizontal size="20" strokeWidth={1} />
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
-                                <SendHorizontal size="20" strokeWidth={1} />
+                                <div className="flex items-center justify-center w-full h-full">
+                                    <SendHorizontal size="20" strokeWidth={1} />
+                                </div>
                             )}
                         </MiniButton>
                     </div>
