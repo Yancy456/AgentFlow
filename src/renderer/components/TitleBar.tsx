@@ -2,13 +2,13 @@ import Box from '@mui/material/Box'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import * as atoms from '../stores/atoms'
 import { useTranslation } from 'react-i18next'
-import { IconButton } from '@mui/material'
-import { Menu as MenuIcon } from 'lucide-react'
+
 import icon from '@/static/icon.png'
 import { Button, IconButton, Menu, MenuItem } from '@mui/material'
 import React, { useState } from 'react'
 import { AlignJustify, ChevronRightIcon, MenuIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import TitleMenu from '@/components/TitleMenu'
 export default function TitleBar() {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
     const [openSettingWindow, setOpenSettingWindow] = useAtom(atoms.openSettingDialogAtom)
@@ -73,7 +73,7 @@ export default function TitleBar() {
                         aria-controls={open ? 'icon-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
+                        onClick={handleMainMenuOpen}
                         disableRipple
                     >
                         <MenuIcon size="20" strokeWidth={1.5} color="black" />
