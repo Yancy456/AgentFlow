@@ -70,9 +70,9 @@ export default function TitleBar() {
                 <div style={{ '-webkit-app-region': 'none' }}>
                     <IconButton
                         id="icon-button"
-                        aria-controls={open ? 'icon-menu' : undefined}
+                        aria-controls={mainMenuOpen ? 'icon-menu' : undefined}
                         aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
+                        aria-expanded={mainMenuOpen ? 'true' : undefined}
                         onClick={handleMainMenuOpen}
                         disableRipple
                     >

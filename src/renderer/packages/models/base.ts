@@ -16,19 +16,19 @@ export default class Base {
 
     async callChatCompletion(
         messages: Message[],
-        signal?: AbortSignal,
-        onResultChange?: onResultChange
+        onResultChange: onResultChange,
+        signal?: AbortSignal
     ): Promise<void> {
         throw new AIProviderNoImplementedChatError(this.name)
     }
 
-    async chat(messages: Message[], onResultUpdated?: () => void): Promise<void> /*
+    async chat(messages: Message[], onResultUpdated: () => void): Promise<void> /*
      */ {
         messages = await this.preprocessMessage(messages)
         await this._chat(messages, onResultUpdated)
     }
 
-    protected async _chat(messages: Message[], onResultUpdated?: () => void): Promise<void> {
+    protected async _chat(messages: Message[], onResultUpdated: () => void): Promise<void> {
         let canceled = false
         const controller = new AbortController()
         const stop = () => {
@@ -36,7 +36,7 @@ export default class Base {
             controller.abort()
         }
         try {
-            await this.callChatCompletion(messages, controller.signal, onResultUpdated)
+            await this.callChatCompletion(messages,  onResultUpdated,controller.signal)
         } catch (error) {
             if (canceled) {
                 //return result
