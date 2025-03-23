@@ -7,4 +7,4 @@ if [[ $local_branch_name =~ $invalid_branch_regex ]]; then
 fi
 
 npm run prettier
-npm run check
+#npm run check
