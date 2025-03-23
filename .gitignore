@@ -84,7 +84,8 @@ typings/
 
 # Webpack
 .webpack/
-
+# Android
+android/
 # Electron-Forge
 out/
 
