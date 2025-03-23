@@ -3,38 +3,7 @@ import { Model } from '../renderer/packages/models/openai'
 import * as siliconflow from '../renderer/packages/models/siliconflow'
 import { ClaudeModel } from '../renderer/packages/models/claude'
 
-export const MessageRoleEnum = {
-    System: 'system',
-    User: 'user',
-    Assistant: 'assistant',
-} as const
-
-export type MessageRole = (typeof MessageRoleEnum)[keyof typeof MessageRoleEnum]
-
-export interface Message {
-    id: string
-
-    role: MessageRole
-    content: string
-    name?: string
-
-    cancel?: () => void
-    generating?: boolean
-
-    aiProvider?: ModelProvider
-    model?: string
-
-    errorCode?: number
-    error?: string
-    errorExtra?: {
-        [key: string]: any
-    }
-
-    wordCount?: number
-    tokenCount?: number
-    tokensUsed?: number
-    timestamp?: number
-}
+import { MessageRoleEnum,Session,Message,MessageRole } from '../renderer/stores/session/data'
 
 export type SettingWindowTab = 'ai' | 'display' | 'chat' | 'advanced'
 
@@ -44,14 +13,6 @@ export function isChatSession(session: Session) {
     return session.type === 'chat' || !session.type
 }
 
-export interface Session {
-    id: string
-    type?: SessionType
-    name: string
-    picUrl?: string
-    messages: Message[]
-    copilotId?: string
-}
 
 export function createMessage(role: MessageRole = MessageRoleEnum.User, content: string = ''): Message {
     return {

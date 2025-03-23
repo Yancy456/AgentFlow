@@ -32,11 +32,11 @@ export default class OpenAI extends Base {
 
     async callChatCompletion(
         rawMessages: Message[],
+        onResultChange: onResultChange,
         signal?: AbortSignal,
-        onResultChange?: onResultChange
     ): Promise<void> {
         try {
-            await this._callChatCompletion(rawMessages, signal, onResultChange)
+            await this._callChatCompletion(rawMessages,  onResultChange,signal)
         } catch (e) {
             if (
                 e instanceof ApiError &&
@@ -50,8 +50,8 @@ export default class OpenAI extends Base {
 
     async _callChatCompletion(
         rawMessages: Message[],
-        signal?: AbortSignal,
-        onResultChange?: onResultChange
+        onResultChange: onResultChange,
+        signal?: AbortSignal
     ): Promise<void> {
         const model = this.options.model === 'custom-model' ? this.options.openaiCustomModel || '' : this.options.model
 
@@ -63,7 +63,8 @@ export default class OpenAI extends Base {
         //}
 
         const messages = await populateGPTMessage(rawMessages.slice(1, rawMessages.length - 1))
-        let response = await this.requestChatCompletionsNotStream(
+        console.log(`messages:${JSON.stringify(messages)}`)
+        await this.requestChatCompletionsStream(
             {
                 messages,
                 model,
@@ -74,66 +75,48 @@ export default class OpenAI extends Base {
                         : undefined,
                 temperature: this.options.temperature,
                 top_p: this.options.topP,
-                stream: false,
+                stream: true,
+            },
+            (delta)=>{
+                if (delta?.reasoning_content) {
+                    // 安全地拼接reasoning_content，处理undefined的情况
+                    const currentContent = rawMessages[rawMessages.length - 1].reasoning_content || ''
+                    rawMessages[rawMessages.length - 1].reasoning_content = currentContent + delta.reasoning_content
+                }
+
+                if (delta?.content) {
+                    // 安全地拼接content，处理undefined的情况
+                    const currentContent = rawMessages[rawMessages.length - 1].content || ''
+                    rawMessages[rawMessages.length - 1].content = currentContent + delta.content
+                }
+                onResultChange()
             },
             signal
         )
-
-        Object.assign(rawMessages[rawMessages.length - 1], {
-            content: response.content,
-            reasoning_content: response?.reasoning_content,
-        }) // update the last message in place, getting rid of complex return statement.
-        if (onResultChange) {
-            onResultChange()
-        }
-
-        //return this.requestChatCompletionsStream(
-        //    {
-        //        messages,
-        //        model,
-        //        // vision 模型的默认 max_tokens 极低，基本很难回答完整，因此手动设置为模型最大值
-        //        max_tokens:
-        //            this.options.model === 'gpt-4-vision-preview'
-        //                ? openaiModelConfigs['gpt-4-vision-preview'].maxTokens
-        //                : undefined,
-        //        temperature: this.options.temperature,
-        //        top_p: this.options.topP,
-        //        stream: true,
-        //    },
-        //    signal,
-        //    onResultChange
-        //)
     }
 
-    //async requestChatCompletionsStream(
-    //    requestBody: Record<string, any>,
-    //    signal?: AbortSignal,
-    //    onResultChange?: onResultChange
-    //): Promise<string> {
-    //    //const apiPath = this.options.apiPath || '/v1/chat/completions'
-    //    const apiPath = this.options.apiPath || '/chat/completions'
-    //    const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
-    //    let result = ''
-    //    console.log(response)
-    //    await this.handleSSE(response, (message) => {
-    //        if (message === '[DONE]') {
-    //            return
-    //        }
-    //        const data = JSON.parse(message)
-    //        if (data.error) {
-    //            throw new ApiError(`Error from OpenAI: ${JSON.stringify(data)}`)
-    //        }
-    //        const text = data.choices[0]?.delta?.content
-    //        if (text !== undefined) {
-    //            result += text
-    //            if (onResultChange) {
-    //                onResultChange(result)
-    //            }
-    //        }
-    //    })
-
-    //    return result
-    //}
+    async requestChatCompletionsStream(
+        requestBody: Record<string, any>,
+        updateMessage: (response: any) => void,
+        signal?: AbortSignal
+    ): Promise<void> {
+        const apiPath = this.options.apiPath || '/chat/completions'
+        const response = await this.post(`${this.options.apiHost}${apiPath}`, this.getHeaders(), requestBody, signal)
+        await this.handleSSE(response, (message) => {
+            if (message === '[DONE]') {
+                return
+            }
+            const data = JSON.parse(message)
+            if (data.error) {
+                throw new ApiError(`Error from OpenAI: ${JSON.stringify(data)}`)
+            }
+            
+            console.log(JSON.stringify(data.choices[0]?.delta))
+            if(data.choices[0]?.delta){
+                updateMessage(data.choices[0]?.delta)
+            }
+        })
+    }
 
     async requestChatCompletionsNotStream(
         requestBody: Record<string, any>,

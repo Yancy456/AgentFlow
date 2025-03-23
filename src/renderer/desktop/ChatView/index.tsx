@@ -1,5 +1,5 @@
 import ChatHistory from '@/ChatHistory'
-import ChatPane from '@/ChatPane'
+import ChatPane from '@/desktop/ChatView/ChatPane'
 import React from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import * as atoms from '@/stores/atoms'

@@ -160,6 +160,7 @@ export function modifyMessage(sessionId: string, updated: Message, refreshCounti
         })
     )
 }
+
 export function refreshMessage(sessionId: string, newMsgs: Message[], updateIdx: number) {
     /*
     refresh the messages, the index of newMsgs is different the original, while others remains the same.

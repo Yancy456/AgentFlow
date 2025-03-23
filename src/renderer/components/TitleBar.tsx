@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { useAtom, useAtomValue } from 'jotai'
+import Box from '@mui/material/Box'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import * as atoms from '../stores/atoms'
 import { useTranslation } from 'react-i18next'
-import { IconButton } from '@mui/material'
-import { Menu as MenuIcon } from 'lucide-react'
-import icon from '@/static/icon.png'
-import TitleMenu from './TitleMenu'
-import { useNavigate } from 'react-router-dom'
 
+import icon from '@/static/icon.png'
+import { Button, IconButton, Menu, MenuItem } from '@mui/material'
+import React, { useState } from 'react'
+import { AlignJustify, ChevronRightIcon, MenuIcon } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import TitleMenu from '@/components/TitleMenu'
 export default function TitleBar() {
     const currentSession = useAtomValue(atoms.currentSessionAtom)
     const [openSettingWindow, setOpenSettingWindow] = useAtom(atoms.openSettingDialogAtom)
@@ -63,19 +64,19 @@ export default function TitleBar() {
     return (
         <div
             className="h-[30.5px] shrink-0 w-full bg-[#f2f2f2] flex content-center items-center justify-between"
-            style={{ WebkitAppRegion: 'drag' }}
+            style={{ '-webkit-app-region': 'drag' }}
         >
             <div className="h-full flex content-center">
-                <div style={{ WebkitAppRegion: 'none' }}>
+                <div style={{ '-webkit-app-region': 'none' }}>
                     <IconButton
                         id="icon-button"
-                        aria-controls={mainMenuOpen ? 'main-menu' : undefined}
+                        aria-controls={mainMenuOpen ? 'icon-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={mainMenuOpen ? 'true' : undefined}
                         onClick={handleMainMenuOpen}
                         disableRipple
                     >
-                        <MenuIcon size={20} strokeWidth={1.5} color="black" />
+                        <MenuIcon size="20" strokeWidth={1.5} color="black" />
                     </IconButton>
                 </div>
 

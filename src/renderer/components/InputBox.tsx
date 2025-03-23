@@ -57,12 +57,12 @@ export default function InputBox(props: Props) {
     }
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.keyCode === 13 && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
             event.preventDefault()
             handleSubmit()
             return
         }
-        if (event.keyCode === 13 && event.ctrlKey) {
+        if (event.key === 'Enter' && event.ctrlKey) {
             event.preventDefault()
             handleSubmit(false)
             return
@@ -100,83 +100,66 @@ export default function InputBox(props: Props) {
                     }}
                     placeholder={t('How can I help you ?') || ''}
                 />
-                <div
-                    className="flex flex-row flex-nowrap justify-between"
-                    //className="flex flex-row flex-nowrap justify-between py-1"
-                >
-                    {/*<div className="flex flex-row items-center">
-                        <MiniButton
-                            className="mr-2"
-                            style={{ color: theme.palette.text.primary }}
-                            onClick={() => setChatConfigDialogSession(sessionActions.getCurrentSession())}
-                            tooltipTitle={
-                                <div className="text-center inline-block">
-                                    <span>{t('Customize settings for the current conversation')}</span>
-                                </div>
-                            }
-                            tooltipPlacement="top"
-                        >
-                            <Settings2 size="20" strokeWidth={1} />
-                        </MiniButton>
-                    </div>*/}
-                    <div className="flex flex-row items-center">
-                        <MiniButton
-                            className=" relative"
-                            style={{
-                                opacity: generating ? 0.7 : 1,
-                                cursor: generating ? 'not-allowed' : 'pointer',
-                            }}
-                            tooltipTitle={<Typography variant="caption">{t('Attach files')}</Typography>}
-                            tooltipPlacement="top"
-                            onClick={() => !generating && handleSubmit()}
-                            disabled={generating}
-                        >
-                            <Paperclip size="20" strokeWidth={1} />
-                        </MiniButton>
-                        <MiniButton
-                            className=" relative"
-                            style={{
-                                opacity: generating ? 0.7 : 1,
-                                cursor: generating ? 'not-allowed' : 'pointer',
-                            }}
-                            tooltipTitle={
-                                <Typography variant="caption">
-                                    {t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}
-                                </Typography>
-                            }
-                            tooltipPlacement="top"
-                            onClick={() => !generating && handleSubmit()}
-                            disabled={generating}
-                        >
-                            {generating ? (
-                                <div className="relative w-full h-full">
-                                    <svg
-                                        className="absolute inset-0 w-full h-full"
-                                        style={{ transform: 'rotate(-90deg)' }}
-                                        viewBox="0 0 100 100"
-                                    >
-                                        <rect
-                                            x="2.5"
-                                            y="2.5"
-                                            width="95"
-                                            height="95"
-                                            fill="none"
-                                            stroke={theme.palette.primary.main}
-                                            strokeWidth="5"
-                                            strokeDasharray="25 375"
-                                            strokeDashoffset="0"
-                                            style={{
-                                                animation: 'progress 2s linear infinite',
-                                            }}
-                                        />
-                                    </svg>
-                                    <SendHorizontal size="20" strokeWidth={1} />
-                                </div>
-                            ) : (
+
+                <div className="flex items-center flex-row-reverse">
+                    <MiniButton
+                        className=" relative"
+                        style={{
+                            opacity: generating ? 0.7 : 1,
+                            cursor: generating ? 'not-allowed' : 'pointer',
+                        }}
+                        tooltipTitle={
+                            <Typography variant="caption">
+                                {t('[Enter] send, [Shift+Enter] line break, [Ctrl+Enter] send without generating')}
+                            </Typography>
+                        }
+                        tooltipPlacement="top"
+                        onClick={() => !generating && handleSubmit()}
+                        disabled={generating}
+                    >
+                        {generating ? (
+                            <div className="relative w-full h-full">
+                                <svg
+                                    className="absolute inset-0 w-full h-full"
+                                    style={{ transform: 'rotate(-90deg)' }}
+                                    viewBox="0 0 100 100"
+                                >
+                                    <rect
+                                        x="2.5"
+                                        y="2.5"
+                                        width="95"
+                                        height="95"
+                                        fill="none"
+                                        stroke={theme.palette.primary.main}
+                                        strokeWidth="5"
+                                        strokeDasharray="25 375"
+                                        strokeDashoffset="0"
+                                        style={{
+                                            animation: 'progress 2s linear infinite',
+                                        }}
+                                    />
+                                </svg>
                                 <SendHorizontal size="20" strokeWidth={1} />
-                            )}
-                        </MiniButton>
-                    </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-center w-full h-full">
+                                <SendHorizontal size="20" strokeWidth={1} />
+                            </div>
+                        )}
+                    </MiniButton>
+                    <MiniButton
+                        className=" relative"
+                        style={{
+                            opacity: generating ? 0.7 : 1,
+                            cursor: generating ? 'not-allowed' : 'pointer',
+                        }}
+                        tooltipTitle={<Typography variant="caption">{t('Attach files')}</Typography>}
+                        tooltipPlacement="top"
+                        onClick={() => !generating && handleSubmit()}
+                        disabled={generating}
+                    >
+                        <Paperclip size="20" strokeWidth={1} />
+                    </MiniButton>
                 </div>
             </div>
             <style>
