@@ -100,11 +100,11 @@ For more information: [chatboxai.app](https://chatboxai.app/)
 
 <a href="https://www.producthunt.com/posts/chatbox?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-chatbox" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=429547&theme=light" alt="Chatbox - Better&#0032;UI&#0032;&#0038;&#0032;Desktop&#0032;App&#0032;for&#0032;ChatGPT&#0044;&#0032;Claude&#0032;and&#0032;other&#0032;LLMs&#0046; | Product Hunt" style="width: 150px; height: 30px;" width="100" height="40" /></a>-->
 
-<a href="./doc/statics/snapshot_light.png">
-<img src="./doc/statics/snapshot_light.png" width="400"/>
+<a href="./doc/statics/desktop.png">
+<img src="./doc/statics/desktop.png" width="400"/>
 </a>
-<a href="./doc/statics/snapshot_dark.png">
-<img src="./doc/statics/snapshot_dark.png" width="400"/>
+<a href="./doc/statics/desktop_dark.png">
+<img src="./doc/statics/desktop_dark.png" width="400"/>
 </a>
 
 <!-- <table>
@@ -123,9 +123,6 @@ For more information: [chatboxai.app](https://chatboxai.app/)
 -   **Local Data Storage**  
     :floppy_disk: Your data remains on your device, ensuring it never gets lost and maintains your privacy.
 
--   **No-Deployment Installation Packages**  
-    :package: Get started quickly with downloadable installation packages. No complex setup necessary!
-
 -   **Support for Multiple LLM Providers**  
     :gear: Seamlessly integrate with a variety of cutting-edge language models:
 
@@ -135,36 +132,6 @@ For more information: [chatboxai.app](https://chatboxai.app/)
     -   Google Gemini Pro
     -   Ollama (enable access to local models like llama2, Mistral, Mixtral, codellama, vicuna, yi, and solar)
     -   ChatGLM-6B
-
--   **Image Generation with Dall-E-3**  
-    :art: Create the images of your imagination with Dall-E-3.
-
--   **Enhanced Prompting**  
-    :speech_balloon: Advanced prompting features to refine and focus your queries for better responses.
-
--   **Keyboard Shortcuts**  
-    :keyboard: Stay productive with shortcuts that speed up your workflow.
-
--   **Markdown, Latex & Code Highlighting**  
-    :scroll: Generate messages with the full power of Markdown and Latex formatting, coupled with syntax highlighting for various programming languages, enhancing readability and presentation.
-
--   **Prompt Library & Message Quoting**  
-    :books: Save and organize prompts for reuse, and quote messages for context in discussions.
-
--   **Streaming Reply**  
-    :arrow_forward: Provide rapid responses to your interactions with immediate, progressive replies.
-
--   **Ergonomic UI & Dark Theme**  
-    :new_moon: A user-friendly interface with a night mode option for reduced eye strain during extended use.
-
--   **Team Collaboration**  
-    :busts_in_silhouette: Collaborate with ease and share OpenAI API resources among your team. [Learn More](./team-sharing/README.md)
-
--   **Cross-Platform Availability**  
-    :computer: Chatbox is ready for Windows, Mac, Linux users.
-
--   **Access Anywhere with the Web Version**  
-    :globe_with_meridians: Use the web application on any device with a browser, anywhere.
 
 -   **iOS & Android**  
     :phone: Use the mobile applications that will bring this power to your fingertips on the go.
@@ -180,9 +147,6 @@ For more information: [chatboxai.app](https://chatboxai.app/)
     -   Français (French)
     -   Deutsch (German)
     -   Русский (Russian)
-
--   **And More...**  
-    :sparkles: Constantly enhancing the experience with new features!
 
 <!--## FAQ
 
