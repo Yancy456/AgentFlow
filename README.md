@@ -1,10 +1,11 @@
 <p align="right">
   <a href="README.md">English</a> |
-  <a href="./doc/README-CN.md">简体中文</a>
+  <!--<a href="./doc/README-CN.md">简体中文</a>-->
 </p>
 
-This is the repository for the Chatbox Community Edition, open-sourced under the GPLv3 license. For most users, I recommend using the Chatbox Official Edition (closed-source). It's still completely free, easy to install, and supports more of the latest features. You can get it below:
+This is the repository for AgentFlow, an open-source, cross-platform general AI Agent application. It provides a clean UI for those who want to develop an agent application but struggle with UI coding. It has clear and comprehensive _Development Documentation_, allowing anyone to develop their own agent application with ease. Based on a frontend tech stack, it can be deployed to different platforms using a single codebase.
 
+<!--
 ### Download for Desktop
 
 <table style="width: 100%">
@@ -66,9 +67,9 @@ This is the repository for the Chatbox Community Edition, open-sourced under the
 
 For more information: [chatboxai.app](https://chatboxai.app/)
 
----
+----->
 
-<h1 align="center">
+<!--<h1 align="center">
 <img src='./doc/statics/icon.png' width='30'>
 <span>
     Chatbox
@@ -97,7 +98,7 @@ For more information: [chatboxai.app](https://chatboxai.app/)
 </a>
 </p>
 
-<a href="https://www.producthunt.com/posts/chatbox?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-chatbox" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=429547&theme=light" alt="Chatbox - Better&#0032;UI&#0032;&#0038;&#0032;Desktop&#0032;App&#0032;for&#0032;ChatGPT&#0044;&#0032;Claude&#0032;and&#0032;other&#0032;LLMs&#0046; | Product Hunt" style="width: 150px; height: 30px;" width="100" height="40" /></a>
+<a href="https://www.producthunt.com/posts/chatbox?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-chatbox" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=429547&theme=light" alt="Chatbox - Better&#0032;UI&#0032;&#0038;&#0032;Desktop&#0032;App&#0032;for&#0032;ChatGPT&#0044;&#0032;Claude&#0032;and&#0032;other&#0032;LLMs&#0046; | Product Hunt" style="width: 150px; height: 30px;" width="100" height="40" /></a>-->
 
 <a href="./doc/statics/snapshot_light.png">
 <img src="./doc/statics/snapshot_light.png" width="400"/>
@@ -183,17 +184,17 @@ For more information: [chatboxai.app](https://chatboxai.app/)
 -   **And More...**  
     :sparkles: Constantly enhancing the experience with new features!
 
-## FAQ
+<!--## FAQ
 
--   [Frequently Asked Questions](./doc/FAQ.md)
+-   [Frequently Asked Questions](./doc/FAQ.md)-->
 
-## Why I made Chatbox?
+<!--## Why I made Chatbox?
 
 I developed Chatbox initially because I was debugging some prompts and found myself in need of a simple and easy-to-use prompt and API debugging tool. I thought there might be more people who needed such a tool, so I open-sourced it.
 
-At first, I didn't know that it would be so popular. I listened to the feedback from the open-source community and continued to develop and improve it. Now, it has become a very useful AI desktop application. There are many users who love Chatbox, and they not only use it for developing and debugging prompts, but also for daily chatting, and even to do some more interesting things like using well-designed prompts to make AI play various professional roles to assist them in everyday work...
+At first, I didn't know that it would be so popular. I listened to the feedback from the open-source community and continued to develop and improve it. Now, it has become a very useful AI desktop application. There are many users who love Chatbox, and they not only use it for developing and debugging prompts, but also for daily chatting, and even to do some more interesting things like using well-designed prompts to make AI play various professional roles to assist them in everyday work...-->
 
-## How to Contribute
+<!--## How to Contribute
 
 Any form of contribution is welcome, including but not limited to:
 
@@ -203,14 +204,14 @@ Any form of contribution is welcome, including but not limited to:
 -   Submitting bug reports
 -   Submitting documentation revisions
 -   Submitting translations
--   Submitting any other forms of contribution
+-   Submitting any other forms of contribution-->
 
 ## Build Instructions
 
 1. Clone the repository from Github
 
 ```bash
-git clone https://github.com/Bin-Huang/chatbox.git
+git clone https://github.com/Yancy456/AgentFlow.git
 ```
 
 2. Install the required dependencies
@@ -237,20 +238,10 @@ npm run package
 npm run package:all
 ```
 
-## Buy Me a Coffee
+## Acknowledgments
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/benn)
-
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Bin-Huang/chatbox&type=Date)](https://star-history.com/#Bin-Huang/chatbox&Date)
-
-## Contact
-
-[Twitter](https://twitter.com/benn_huang) | [Email](mailto:tohuangbin@gmail.com) | [Blog](https://bennhuang.com)
+We would like to express our sincere gratitude to the [Chatbox](https://github.com/Bin-Huang/chatbox.git) project and its contributors. Some parts of our codebase are inspired by or adapted from the Chatbox project, which has been instrumental in helping us build AgentFlow. We highly appreciate their excellent work in the open-source community.
 
 ## License
 
 [LICENSE](./LICENSE)
-"# ChatFlow" 

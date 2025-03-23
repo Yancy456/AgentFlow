@@ -6,5 +6,5 @@ if [[ $local_branch_name =~ $invalid_branch_regex ]]; then
     exit 1
 fi
 
-npm run prettier
+#npm run prettier
 #npm run check
