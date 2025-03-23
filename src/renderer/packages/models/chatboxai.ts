@@ -32,44 +32,40 @@ export default class ChatboxAI extends Base {
         this.config = config
     }
 
-    async callChatCompletion(
-        rawMessages: Message[],
-        signal?: AbortSignal,
-        onResultChange?: onResultChange
-    ): Promise<string> {
-        const messages = await populateChatboxAIMessage(rawMessages)
-        const response = await this.post(
-            `${API_ORIGIN}/api/ai/chat`,
-            this.getHeaders(),
-            {
-                uuid: this.config.uuid,
-                model: this.options.chatboxAIModel || 'chatboxai-3.5',
-                messages,
-                temperature: this.options.temperature,
-                language: this.options.language,
-                stream: true,
-            },
-            signal
-        )
-        let result = ''
-        await this.handleSSE(response, (message) => {
-            if (message === '[DONE]') {
-                return
-            }
-            const data = JSON.parse(message)
-            if (data.error) {
-                throw new ApiError(`Error from Chatbox AI: ${JSON.stringify(data)}`)
-            }
-            const word = data.choices[0]?.delta?.content
-            if (word !== undefined) {
-                result += word
-                if (onResultChange) {
-                    onResultChange(result)
-                }
-            }
-        })
-        return result
-    }
+    //async callChatCompletion(rawMessages: Message[], signal?: AbortSignal, onResultChange?: onResultChange): Promise<string> {
+    //    const messages = await populateChatboxAIMessage(rawMessages)
+    //    const response = await this.post(
+    //        `${API_ORIGIN}/api/ai/chat`,
+    //        this.getHeaders(),
+    //        {
+    //            uuid: this.config.uuid,
+    //            model: this.options.chatboxAIModel || 'chatboxai-3.5',
+    //            messages,
+    //            temperature: this.options.temperature,
+    //            language: this.options.language,
+    //            stream: true,
+    //        },
+    //        signal
+    //    )
+    //    let result = ''
+    //    await this.handleSSE(response, (message) => {
+    //        if (message === '[DONE]') {
+    //            return
+    //        }
+    //        const data = JSON.parse(message)
+    //        if (data.error) {
+    //            throw new ApiError(`Error from Chatbox AI: ${JSON.stringify(data)}`)
+    //        }
+    //        const word = data.choices[0]?.delta?.content
+    //        if (word !== undefined) {
+    //            result += word
+    //            if (onResultChange) {
+    //                onResultChange(result)
+    //            }
+    //        }
+    //    })
+    //    return result
+    //}
 
     getHeaders() {
         const license = this.options.licenseKey || ''

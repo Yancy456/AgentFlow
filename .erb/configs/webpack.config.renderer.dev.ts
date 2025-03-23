@@ -194,7 +194,7 @@ const configuration: webpack.Configuration = {
                 .on('error', (spawnError) => console.error(spawnError))
 
             console.log('Starting Main Process...')
-            let args = ['run', 'start:main']
+            let args = ['--remote-debugging-port=8315', '--inspect=9229', 'run', 'start:main']
             if (process.env.MAIN_ARGS) {
                 args = args.concat(['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat())
             }

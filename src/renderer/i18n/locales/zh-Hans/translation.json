@@ -1,4 +1,6 @@
 {
+    "sidebar_chat": "我们来聊天吧",
+    "sidebar_agents": "我的搭档",
     "settings": "设置",
     "theme": "主题",
     "show message word count": "显示消息的字数统计",

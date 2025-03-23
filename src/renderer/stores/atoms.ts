@@ -6,21 +6,38 @@ import * as defaults from '../../shared/defaults'
 import storage, { StorageKey } from '../storage'
 import platform from '../packages/platform'
 
-const _settingsAtom = atomWithStorage<Settings>(StorageKey.Settings, defaults.settings(), storage)
-export const settingsAtom = atom(
-    (get) => {
-        const settings = get(_settingsAtom)
-        return Object.assign({}, defaults.settings(), settings)
-    },
-    (get, set, update: SetStateAction<Settings>) => {
-        const settings = get(_settingsAtom)
-        let newSettings = typeof update === 'function' ? update(settings) : update
-        if (newSettings.proxy !== settings.proxy) {
-            platform.ensureProxyConfig({ proxy: newSettings.proxy })
-        }
-        set(_settingsAtom, newSettings)
+// A function to initialize the settingsAtom based on the current value in storage
+function initializeSettingsAtom() {
+    let storedSettings = localStorage.getItem(StorageKey.Settings)
+    let storedSettings_obj: Settings
+    if (storedSettings !== null) {
+        // If settings exist in storage, parse and set them as the initial value
+        storedSettings_obj = JSON.parse(storedSettings)
+    } else {
+        // If no settings exist, use the default settings
+        storedSettings_obj = defaults.settings()
     }
-)
+    const _settingsAtom = atomWithStorage<Settings>(StorageKey.Settings, storedSettings_obj)
+    return _settingsAtom
+}
+
+// Initialize the settingsAtom with the current value from storage
+export let settingsAtom = initializeSettingsAtom()
+
+//export let settingsAtom = atom(
+//    (get) => {
+//        const settings = get(_settingsAtom)
+//        return Object.assign({}, defaults.settings(), settings)
+//    },
+//    (get, set, update: SetStateAction<Settings>) => {
+//        const settings = get(_settingsAtom)
+//        let newSettings = typeof update === 'function' ? update(settings) : update
+//        if (newSettings.proxy !== settings.proxy) {
+//            platform.ensureProxyConfig({ proxy: newSettings.proxy })
+//        }
+//        set(_settingsAtom, newSettings)
+//    }
+//)
 
 export const languageAtom = focusAtom(settingsAtom, (optic) => optic.prop('language'))
 export const showWordCountAtom = focusAtom(settingsAtom, (optic) => optic.prop('showWordCount'))
@@ -41,7 +58,6 @@ export const licenseDetailAtom = focusAtom(settingsAtom, (optic) => optic.prop('
 export const myCopilotsAtom = atomWithStorage<CopilotDetail[]>(StorageKey.MyCopilots, [], storage)
 
 // sessions
-
 const _sessionsAtom = atomWithStorage<Session[]>(StorageKey.ChatSessions, [], storage)
 export const sessionsAtom = atom(
     (get) => {
@@ -105,11 +121,9 @@ export const currentMessageListAtom = selectAtom(currentSessionAtom, (s) => {
 })
 
 // toasts
-
 export const toastsAtom = atom<Toast[]>([])
 
 // theme
-
 export const activeThemeAtom = atom<'light' | 'dark'>('light')
 
 export const configVersionAtom = atomWithStorage<number>(StorageKey.ConfigVersion, 0, storage)
@@ -117,5 +131,6 @@ export const configVersionAtom = atomWithStorage<number>(StorageKey.ConfigVersio
 export const messageListRefAtom = atom<null | React.MutableRefObject<HTMLDivElement | null>>(null)
 
 export const openSettingDialogAtom = atom<SettingWindowTab | null>(null)
+export const openCopilotWindowAtom = atom<boolean | null>(null)
 export const sessionCleanDialogAtom = atom<Session | null>(null)
 export const chatConfigDialogAtom = atom<Session | null>(null)

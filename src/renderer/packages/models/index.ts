@@ -40,12 +40,6 @@ export const aiProviderNameHash = {
 
 export const AIModelProviderMenuOptionList = [
     {
-        value: ModelProvider.ChatboxAI,
-        label: aiProviderNameHash[ModelProvider.ChatboxAI],
-        featured: true,
-        disabled: false,
-    },
-    {
         value: ModelProvider.OpenAI,
         label: aiProviderNameHash[ModelProvider.OpenAI],
         disabled: false,

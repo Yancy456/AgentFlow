@@ -1,9 +1,9 @@
-import { MutableRefObject } from 'react'
+import { MutableRefObject, useRef } from 'react'
 import SessionItem from './SessionItem'
 import * as atoms from '../stores/atoms'
 import { useAtomValue, useSetAtom } from 'jotai'
 import type { DragEndEvent } from '@dnd-kit/core'
-import { MenuList } from '@mui/material'
+import { IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Typography } from '@mui/material'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import {
@@ -17,7 +17,9 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-
+import * as sessionActions from '@/stores/session/sessionActions'
+import AddIcon from '@mui/icons-material/AddCircleOutline'
+import { useTranslation } from 'react-i18next'
 export interface Props {
     sessionListRef: MutableRefObject<HTMLDivElement | null>
 }
@@ -55,6 +57,15 @@ export default function SessionList(props: Props) {
             setSessions(atoms.sortSessions(newReversed))
         }
     }
+    const { t } = useTranslation()
+    const sessionListRef = useRef<HTMLDivElement>(null)
+    const handleCreateNewSession = () => {
+        sessionActions.createEmpty('chat')
+        if (sessionListRef.current) {
+            sessionListRef.current.scrollTo(0, 0)
+        }
+        //trackingEvent('create_new_conversation', { event_category: 'user' })
+    }
     return (
         <MenuList
             sx={{
@@ -64,7 +75,7 @@ export default function SessionList(props: Props) {
                 flexGrow: 1,
             }}
             component="div"
-            ref={props.sessionListRef}
+            ref={sessionListRef}
         >
             <DndContext
                 modifiers={[restrictToVerticalAxis]}
@@ -84,6 +95,17 @@ export default function SessionList(props: Props) {
                     ))}
                 </SortableContext>
             </DndContext>
+            <MenuItem onClick={handleCreateNewSession} sx={{ padding: '0.2rem 0.1rem', margin: '0.1rem' }}>
+                <ListItemIcon>
+                    <IconButton>
+                        <AddIcon fontSize="small" />
+                    </IconButton>
+                </ListItemIcon>
+                <ListItemText>{t('new chat')}</ListItemText>
+                <Typography variant="body2" color="text.secondary">
+                    {/* ⌘N */}
+                </Typography>
+            </MenuItem>
         </MenuList>
     )
 }

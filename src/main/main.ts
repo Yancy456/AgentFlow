@@ -92,16 +92,20 @@ const createWindow = async () => {
         show: false,
         width: 1000,
         height: 950,
+        titleBarStyle: 'hidden',// Hides the title bar but keeps the buttons functional
+        titleBarOverlay: true,
         icon: getAssetPath('icon.png'),
         webPreferences: {
             spellcheck: true,
             webSecurity: false,
+
             allowRunningInsecureContent: false,
             preload: app.isPackaged
                 ? path.join(__dirname, 'preload.js')
                 : path.join(__dirname, '../../.erb/dll/preload.js'),
         },
     })
+
 
     mainWindow.loadURL(resolveHtmlPath('index.html'))
 
