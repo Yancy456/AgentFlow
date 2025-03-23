@@ -59,7 +59,7 @@ export default function TitleBar() {
     ]
 
     // 标题栏配置
-    const title = 'ChatFlow'
+    const title = 'AgentFlow'
 
     return (
         <div
@@ -80,7 +80,7 @@ export default function TitleBar() {
                     </IconButton>
                 </div>
 
-                <img src={icon} className="w-5 h-5 mt-[7px]" alt="ChatFlow Icon" />
+                <img src={icon} className="w-5 h-5 mt-[7px]" />
             </div>
             <div>{title}</div>
             <div className="w-[150px]"></div>
