@@ -152,7 +152,7 @@
         "gojs": "^3.0.19",
         "gojs-react": "^1.1.2",
         "highlight.js": "^11.7.0",
-        "i18next": "^22.4.13",
+        "i18next": "^25.0.2",
         "jotai": "^2.1.0",
         "jotai-optics": "^0.3.0",
         "js-tiktoken": "^1.0.7",
